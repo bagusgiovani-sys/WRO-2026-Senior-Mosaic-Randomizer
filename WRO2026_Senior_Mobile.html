@@ -1,0 +1,2156 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>WRO 2026 Senior — Mosaic Masters</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap");
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --gold: #fbbf24;
+        --orange: #f97316;
+        --cyan: #00d4ff;
+        --purple: #e879f9;
+        --green: #34d399;
+        --blue: #60a5fa;
+        --bg: #080d1e;
+        --card: #0f1530;
+        --text: #f0f6ff;
+        --muted: #8492b0;
+        --fs-base: 17px;
+        --fs-sm: 14px;
+        --fs-xs: 12px;
+      }
+
+      html {
+        font-size: var(--fs-base);
+      }
+
+      .W {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Exo 2", sans-serif;
+        line-height: 1.7;
+        overflow-x: hidden;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      .W::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(251, 191, 36, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(251, 191, 36, 0.03) 1px, transparent 1px);
+        background-size: 44px 44px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .pg {
+        position: relative;
+        z-index: 1;
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 0 20px 80px;
+      }
+
+      /* ─── HERO ─── */
+      .hero {
+        padding: 52px 0 44px;
+      }
+
+      .hbadge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(251, 191, 36, 0.1);
+        border: 1px solid rgba(251, 191, 36, 0.35);
+        color: var(--gold);
+        font-size: clamp(11px, 2.8vw, 13px);
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 9px 20px;
+        border-radius: 100px;
+        margin-bottom: 26px;
+      }
+      .hbadge b {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--gold);
+        animation: blink 1.8s infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.2;
+        }
+      }
+
+      .hero h1 {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(52px, 13vw, 72px);
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -2px;
+        background: linear-gradient(
+          135deg,
+          #fff 0%,
+          var(--gold) 45%,
+          var(--orange) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 14px;
+      }
+
+      .hsub {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(13px, 3.8vw, 20px);
+        font-weight: 600;
+        color: var(--cyan);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+      }
+
+      .hdesc {
+        color: var(--muted);
+        font-size: clamp(15px, 4vw, 17px);
+        line-height: 1.8;
+        margin-bottom: 34px;
+      }
+
+      /* Stats pills — 2-column grid on mobile */
+      .hstats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      @media (min-width: 600px) {
+        .hstats {
+          grid-template-columns: repeat(3, auto);
+          display: flex;
+          flex-wrap: wrap;
+        }
+      }
+
+      .spill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 14px 16px;
+        border-radius: 16px;
+      }
+      .spill .ic {
+        font-size: 26px;
+        flex-shrink: 0;
+      }
+      .spill .vl {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(15px, 3.8vw, 16px);
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1.2;
+      }
+      .spill .lb {
+        font-size: clamp(11px, 2.8vw, 12px);
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .hdiv {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          var(--gold),
+          var(--orange),
+          transparent
+        );
+        margin-top: 46px;
+        opacity: 0.5;
+      }
+
+      /* ─── SECTIONS ─── */
+      .sec {
+        margin-top: 60px;
+      }
+
+      .slbl {
+        font-size: clamp(10px, 2.5vw, 11px);
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 10px;
+      }
+
+      .stit {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(22px, 6vw, 30px);
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+      .stit span {
+        color: var(--gold);
+      }
+
+      .sln {
+        width: 48px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--gold), var(--orange));
+        border-radius: 2px;
+        margin: 14px 0 28px;
+      }
+
+      /* ─── OVERVIEW GRID ─── */
+      .ovg {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      @media (min-width: 700px) {
+        .ovg {
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        }
+      }
+
+      .ovc {
+        background: var(--card);
+        border: 1px solid rgba(251, 191, 36, 0.18);
+        border-radius: 18px;
+        padding: 22px 16px;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.25s,
+          transform 0.2s;
+      }
+      .ovc::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--gold), var(--orange));
+        opacity: 0;
+        transition: opacity 0.25s;
+      }
+      .ovc:hover {
+        transform: translateY(-3px);
+        border-color: var(--gold);
+      }
+      .ovc:hover::before {
+        opacity: 1;
+      }
+      .ovic {
+        font-size: 30px;
+        margin-bottom: 12px;
+        display: block;
+      }
+      .ovvl {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(18px, 5vw, 22px);
+        font-weight: 900;
+        color: var(--gold);
+        line-height: 1;
+        margin-bottom: 5px;
+      }
+      .ovky {
+        font-size: clamp(13px, 3.5vw, 14px);
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+      .ovds {
+        font-size: clamp(12px, 3vw, 13px);
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      /* ─── MISSION CARDS ─── */
+      .sb-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      @media (max-width: 480px) {
+        .sb-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .sb-card {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 20px;
+        border-top: 3px solid transparent;
+        border-left: 1px solid rgba(255, 255, 255, 0.08);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .sbc-n {
+        font-size: clamp(10px, 2.5vw, 11px);
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+      .sb-card h4 {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(12px, 3vw, 14px);
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 10px;
+        line-height: 1.4;
+      }
+      .sb-card p {
+        font-size: clamp(13px, 3.3vw, 14px);
+        color: var(--muted);
+        line-height: 1.65;
+      }
+      .sb-pts {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(16px, 4.5vw, 20px);
+        font-weight: 900;
+        margin-top: 12px;
+      }
+      .sbc-1 {
+        border-top-color: var(--gold);
+      }
+      .sbc-1 .sbc-n,
+      .sbc-1 .sb-pts {
+        color: var(--gold);
+      }
+      .sbc-2 {
+        border-top-color: var(--blue);
+      }
+      .sbc-2 .sbc-n,
+      .sbc-2 .sb-pts {
+        color: var(--blue);
+      }
+      .sbc-3 {
+        border-top-color: var(--green);
+      }
+      .sbc-3 .sbc-n,
+      .sbc-3 .sb-pts {
+        color: var(--green);
+      }
+      .sbc-4 {
+        border-top-color: var(--purple);
+      }
+      .sbc-4 .sbc-n,
+      .sbc-4 .sb-pts {
+        color: var(--purple);
+      }
+
+      .tsb {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        background: linear-gradient(
+          135deg,
+          rgba(251, 191, 36, 0.08),
+          rgba(249, 115, 22, 0.08)
+        );
+        border: 1px solid rgba(251, 191, 36, 0.2);
+        border-radius: 18px;
+        padding: 20px 24px;
+        margin-top: 14px;
+      }
+      .tslb {
+        font-size: clamp(13px, 3.5vw, 15px);
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .tsvl {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(28px, 8vw, 36px);
+        font-weight: 900;
+        background: linear-gradient(90deg, var(--gold), var(--orange));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .tsnote {
+        font-size: clamp(12px, 3vw, 14px);
+        color: var(--muted);
+      }
+
+      /* ─── TAGS ─── */
+      .tr {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      .tg {
+        font-size: clamp(11px, 3vw, 13px);
+        font-weight: 600;
+        padding: 7px 14px;
+        border-radius: 100px;
+      }
+      .tg-y {
+        background: rgba(251, 191, 36, 0.1);
+        color: var(--gold);
+        border: 1px solid rgba(251, 191, 36, 0.25);
+      }
+      .tg-b {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--blue);
+        border: 1px solid rgba(59, 130, 246, 0.25);
+      }
+      .tg-g {
+        background: rgba(34, 211, 160, 0.1);
+        color: var(--green);
+        border: 1px solid rgba(34, 211, 160, 0.25);
+      }
+      .tg-o {
+        background: rgba(249, 115, 22, 0.1);
+        color: #fb923c;
+        border: 1px solid rgba(249, 115, 22, 0.25);
+      }
+      .tg-p {
+        background: rgba(232, 121, 249, 0.1);
+        color: var(--purple);
+        border: 1px solid rgba(232, 121, 249, 0.25);
+      }
+
+      /* ─── RULES GRID ─── */
+      .rg {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      @media (min-width: 560px) {
+        .rg {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .rc {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        background: rgba(251, 191, 36, 0.04);
+        border: 1px solid rgba(251, 191, 36, 0.15);
+        border-radius: 18px;
+        padding: 20px 18px;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .rc:hover {
+        border-color: rgba(251, 191, 36, 0.4);
+        background: rgba(251, 191, 36, 0.07);
+      }
+      .ric {
+        font-size: 30px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .rc h4 {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(12px, 3.2vw, 13px);
+        font-weight: 700;
+        color: var(--gold);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 7px;
+      }
+      .rc p {
+        font-size: clamp(13px, 3.5vw, 14.5px);
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      /* ─── PHASE LABELS ─── */
+      .phlbl {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 32px 0 14px;
+      }
+      .phlbl .ptag {
+        font-family: "Exo 2", sans-serif;
+        font-size: clamp(11px, 3vw, 12px);
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 8px 16px;
+        border-radius: 100px;
+        white-space: nowrap;
+      }
+      .phlbl .pln {
+        flex: 1;
+        height: 1px;
+        opacity: 0.3;
+      }
+      .phlbl .pnum {
+        font-size: clamp(11px, 3vw, 13px);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .ph1 .ptag {
+        background: rgba(251, 191, 36, 0.15);
+        color: var(--gold);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+      }
+      .ph1 .pln {
+        background: var(--gold);
+      }
+      .ph2 .ptag {
+        background: rgba(59, 130, 246, 0.15);
+        color: var(--blue);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+      }
+      .ph2 .pln {
+        background: var(--blue);
+      }
+      .ph3 .ptag {
+        background: rgba(34, 211, 160, 0.15);
+        color: var(--green);
+        border: 1px solid rgba(34, 211, 160, 0.3);
+      }
+      .ph3 .pln {
+        background: var(--green);
+      }
+      .ph4 .ptag {
+        background: rgba(249, 115, 22, 0.15);
+        color: #fb923c;
+        border: 1px solid rgba(249, 115, 22, 0.3);
+      }
+      .ph4 .pln {
+        background: #fb923c;
+      }
+      .ph5 .ptag {
+        background: rgba(232, 121, 249, 0.15);
+        color: var(--purple);
+        border: 1px solid rgba(232, 121, 249, 0.3);
+      }
+      .ph5 .pln {
+        background: var(--purple);
+      }
+
+      /* ─── SESSION CARDS (mobile-first, no table) ─── */
+      .slist {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .scard {
+        display: flex;
+        gap: 0;
+        background: var(--card);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        overflow: hidden;
+        transition:
+          border-color 0.2s,
+          transform 0.15s;
+      }
+      .scard:hover {
+        transform: translateY(-2px);
+      }
+
+      .scard-bar {
+        width: 5px;
+        flex-shrink: 0;
+      }
+      .ph1c .scard-bar {
+        background: var(--gold);
+      }
+      .ph2c .scard-bar {
+        background: var(--blue);
+      }
+      .ph3c .scard-bar {
+        background: var(--green);
+      }
+      .ph4c .scard-bar {
+        background: #fb923c;
+      }
+      .ph5c .scard-bar {
+        background: var(--purple);
+      }
+
+      .scard-inner {
+        padding: 16px 18px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .scard-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .scard-num {
+        font-family: "Orbitron", sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--muted);
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .scard-date {
+        font-size: clamp(11px, 3vw, 12px);
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .scard-day-sat {
+        color: var(--gold);
+      }
+      .scard-day-sun {
+        color: #fb923c;
+      }
+      .scard-output {
+        margin-left: auto;
+        font-size: clamp(10px, 2.5vw, 11px);
+        font-weight: 500;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 3px 10px;
+        border-radius: 6px;
+        color: var(--text);
+        white-space: nowrap;
+      }
+
+      .scard-title {
+        font-size: clamp(15px, 4.2vw, 16.5px);
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1.35;
+      }
+
+      .scard-desc {
+        font-size: clamp(13px, 3.5vw, 14.5px);
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      /* ─── OUTCOMES ─── */
+      .outg {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 11px;
+      }
+      @media (min-width: 560px) {
+        .outg {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .outi {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(251, 191, 36, 0.15);
+        border-radius: 18px;
+        padding: 18px 16px;
+        transition: border-color 0.2s;
+      }
+      .outi:hover {
+        border-color: rgba(251, 191, 36, 0.4);
+      }
+      .outn {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(11px, 3vw, 12px);
+        font-weight: 700;
+        color: var(--gold);
+        min-width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background: rgba(251, 191, 36, 0.12);
+        border: 1px solid rgba(251, 191, 36, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .outt {
+        font-size: clamp(14px, 3.8vw, 15px);
+        color: var(--text);
+        font-weight: 500;
+        line-height: 1.6;
+      }
+
+      /* ─── CHECKLIST ─── */
+      .clw {
+        background: linear-gradient(
+          135deg,
+          rgba(8, 10, 30, 0.95),
+          rgba(20, 12, 8, 0.95)
+        );
+        border: 1px solid rgba(249, 115, 22, 0.25);
+        border-radius: 22px;
+        padding: 28px 22px;
+      }
+      .clw > p {
+        color: var(--muted);
+        font-size: clamp(14px, 3.8vw, 15.5px);
+        line-height: 1.75;
+        margin-bottom: 22px;
+      }
+      .clg {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      @media (min-width: 560px) {
+        .clg {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .chi {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 14px;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
+      }
+      .chi:hover {
+        background: rgba(251, 191, 36, 0.07);
+        border-color: rgba(251, 191, 36, 0.3);
+      }
+      .chb {
+        width: 24px;
+        height: 24px;
+        border-radius: 8px;
+        border: 1.5px solid rgba(251, 191, 36, 0.5);
+        background: rgba(251, 191, 36, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+        font-size: 12px;
+        color: var(--gold);
+      }
+      .cht {
+        font-size: clamp(13px, 3.5vw, 14.5px);
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .cht strong {
+        color: var(--text);
+        font-weight: 600;
+        display: block;
+        margin-bottom: 3px;
+        font-size: clamp(14px, 3.8vw, 15.5px);
+      }
+
+      /* ─── FOOTER ─── */
+      .ftr {
+        margin-top: 60px;
+        padding-top: 28px;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .fbr {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(14px, 4vw, 16px);
+        font-weight: 700;
+        background: linear-gradient(90deg, var(--gold), var(--orange));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .fn {
+        font-size: clamp(12px, 3.2vw, 13.5px);
+        color: var(--muted);
+      }
+      .fn span {
+        color: var(--gold);
+        font-weight: 600;
+      }
+
+      /* ─── RESPONSIVE TWEAKS ─── */
+      @media (max-width: 400px) {
+        .pg {
+          padding: 0 14px 60px;
+        }
+        .hero {
+          padding: 36px 0 32px;
+        }
+        .hero h1 {
+          font-size: clamp(44px, 14vw, 64px);
+        }
+        .scard-inner {
+          padding: 14px 14px;
+        }
+      }
+
+      /* ── LANGUAGE TOGGLE ── */
+      .lang-toggle {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        gap: 0;
+        background: rgba(8, 13, 30, 0.9);
+        border: 1px solid rgba(251, 191, 36, 0.35);
+        border-radius: 100px;
+        backdrop-filter: blur(12px);
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      }
+      .lang-btn {
+        font-family: "Exo 2", sans-serif;
+        font-size: clamp(12px, 3.2vw, 13px);
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        padding: 10px 18px;
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .lang-btn.active {
+        background: rgba(251, 191, 36, 0.18);
+        color: var(--gold);
+      }
+      .lang-divider {
+        width: 1px;
+        height: 18px;
+        background: rgba(251, 191, 36, 0.25);
+        flex-shrink: 0;
+      }
+      @media (max-width: 400px) {
+        .lang-toggle {
+          top: 10px;
+          right: 10px;
+        }
+        .lang-btn {
+          padding: 9px 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="W">
+      <!-- LANGUAGE TOGGLE -->
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btn-id" onclick="setLang('id')">
+          🇮🇩 Indonesia
+        </button>
+        <div class="lang-divider"></div>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">
+          🇬🇧 English
+        </button>
+      </div>
+
+      <div class="pg">
+        <!-- HERO -->
+        <section class="hero">
+          <div class="hbadge">
+            <b></b>
+            <span data-i18n="badge"
+              >WRO 2026 &nbsp;·&nbsp; Senior RoboMission &nbsp;·&nbsp; Program
+              Resmi</span
+            >
+          </div>
+          <h1>Mosaic<br />Masters</h1>
+          <div class="hsub" data-i18n="hsub">Senior Competition Prep</div>
+          <p class="hdesc" data-i18n="hdesc">
+            Program intensif 20 sesi untuk tim Senior menghadapi WRO 2026
+            RoboMission — dari build robot canggih, color sensor, mosaic
+            placement, hingga mock competition.
+          </p>
+          <div class="hstats">
+            <div class="spill">
+              <span class="ic">🤖</span>
+              <div>
+                <div class="vl" data-i18n="s1-vl">20 Sesi</div>
+                <div class="lb" data-i18n="s1-lb">Total Sessions</div>
+              </div>
+            </div>
+            <div class="spill">
+              <span class="ic">⏱️</span>
+              <div>
+                <div class="vl" data-i18n="s2-vl">2 Jam</div>
+                <div class="lb" data-i18n="s2-lb">Per Sesi</div>
+              </div>
+            </div>
+            <div class="spill">
+              <span class="ic">📅</span>
+              <div>
+                <div class="vl" data-i18n="s3-vl">Sab &amp; Min</div>
+                <div class="lb" data-i18n="s3-lb">Mulai 23 Mei</div>
+              </div>
+            </div>
+            <div class="spill">
+              <span class="ic">🎯</span>
+              <div>
+                <div class="vl">14–19 Thn</div>
+                <div class="lb" data-i18n="s4-lb">Target Usia</div>
+              </div>
+            </div>
+            <div class="spill">
+              <span class="ic">🏆</span>
+              <div>
+                <div class="vl">233 Pts</div>
+                <div class="lb" data-i18n="s5-lb">Skor Maks</div>
+              </div>
+            </div>
+            <div class="spill">
+              <span class="ic">⚙️</span>
+              <div>
+                <div class="vl">6 Motors</div>
+                <div class="lb">Senior Privilege</div>
+              </div>
+            </div>
+          </div>
+          <div class="hdiv"></div>
+        </section>
+
+        <!-- 01 OVERVIEW -->
+        <section class="sec">
+          <div class="slbl" data-i18n="s01-lbl">01 — Program Overview</div>
+          <h2 class="stit" data-i18n="s01-title">
+            Tentang <span>Program Ini</span>
+          </h2>
+          <div class="sln"></div>
+          <div class="ovg">
+            <div class="ovc">
+              <span class="ovic">🏗️</span>
+              <div class="ovvl">Build</div>
+              <div class="ovky">Advanced Robot</div>
+              <div class="ovds" data-i18n="ov1-ds">
+                Robot bertenaga tinggi dengan hingga 6 motor, 250³ mm, bobot
+                ≤1.5 kg.
+              </div>
+            </div>
+            <div class="ovc">
+              <span class="ovic">🎨</span>
+              <div class="ovvl">Sense</div>
+              <div class="ovky">Color Sensor</div>
+              <div class="ovds" data-i18n="ov2-ds">
+                Deteksi warna mosaic tiles dan cement menggunakan color sensor
+                LEGO Spike.
+              </div>
+            </div>
+            <div class="ovc">
+              <span class="ovic">🧩</span>
+              <div class="ovvl">Place</div>
+              <div class="ovky">Mosaic Mastery</div>
+              <div class="ovds" data-i18n="ov3-ds">
+                Susun tiles ke mosaic frame sesuai pola yang dirandomisasi tiap
+                ronde.
+              </div>
+            </div>
+            <div class="ovc">
+              <span class="ovic">🧱</span>
+              <div class="ovvl">Deliver</div>
+              <div class="ovky">Cement Elements</div>
+              <div class="ovds" data-i18n="ov4-ds">
+                Kirim 40 cement elements ke cement target area sesuai warna.
+              </div>
+            </div>
+            <div class="ovc">
+              <span class="ovic">🥇</span>
+              <div class="ovvl">Compete</div>
+              <div class="ovky">Mock Competition</div>
+              <div class="ovds" data-i18n="ov5-ds">
+                Simulasi penuh: check → quarantine → 2-menit run → scoring →
+                refleksi.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 02 CHALLENGE -->
+        <section class="sec">
+          <div class="slbl" data-i18n="s02-lbl">02 — Challenge Summary</div>
+          <h2 class="stit" data-i18n="s02-title">
+            WRO 2026 Senior <span>Mission Breakdown</span>
+          </h2>
+          <div class="sln"></div>
+          <div class="tr">
+            <span class="tg tg-y">🏛️ Mosaic Masters</span>
+            <span class="tg tg-b" data-i18n="tag-run">⏱️ 2 Menit Run</span>
+            <span class="tg tg-o">📦 250×250×250 mm</span>
+            <span class="tg tg-g">⚙️ Max 6 Motors</span>
+            <span class="tg tg-g">🎨 Color Sensor</span>
+          </div>
+          <div class="sb-grid">
+            <div class="sb-card sbc-1">
+              <div class="sbc-n">⚒️ Mission 1</div>
+              <h4>Provide the Tools</h4>
+              <p data-i18n="m1-p">
+                Bawa 3 alat ke area target masing-masing:<br /><strong
+                  style="color: var(--gold)"
+                  >Rectangular trowel</strong
+                >
+                → Sponsor Area<br /><strong style="color: var(--gold)"
+                  >Cement bowl</strong
+                >
+                → Parking Space<br /><strong style="color: var(--gold)"
+                  >Masonry trowel</strong
+                >
+                → Start Area
+              </p>
+              <div class="sb-pts">MAX 45 PTS</div>
+            </div>
+            <div class="sb-card sbc-2">
+              <div class="sbc-n">🧩 Mission 2</div>
+              <h4>Put the Mosaic in Place</h4>
+              <p data-i18n="m2-p">
+                Susun
+                <strong style="color: var(--blue)">mosaic tiles</strong>
+                (kuning, biru, hijau, putih) ke mosaic frame sesuai pola yang
+                <em>dirandomisasi</em> tiap ronde.
+              </p>
+              <div class="sb-pts">MAX 120 PTS</div>
+            </div>
+            <div class="sb-card sbc-3">
+              <div class="sbc-n">🧱 Mission 3</div>
+              <h4>Deliver the Cement</h4>
+              <p data-i18n="m3-p">
+                Antarkan
+                <strong style="color: var(--green)">cement elements</strong> ke
+                cement target area sesuai warnanya. Posisi acak setiap ronde.
+              </p>
+              <div class="sb-pts">MAX 40 PTS</div>
+            </div>
+            <div class="sb-card sbc-4">
+              <div class="sbc-n">🛡️ Bonus Mission</div>
+              <h4>Protect the Barriers</h4>
+              <p data-i18n="m4-p">
+                Jaga agar semua
+                <strong style="color: var(--purple)">4 barriers</strong> (2
+                merah &amp; 2 hitam) tidak dipindahkan atau rusak.
+              </p>
+              <div class="sb-pts">MAX 28 PTS</div>
+            </div>
+          </div>
+          <div class="tsb">
+            <div>
+              <div class="tslb" data-i18n="tsb-lbl">Total Skor Maksimum</div>
+              <div class="tsvl">233 Points</div>
+            </div>
+            <div class="tsnote">
+              45 + 120 + 40 + 28<br /><span
+                style="color: rgba(255, 255, 255, 0.3); font-size: 12px"
+                >tools + mosaic + cement + barriers</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- 03 RULES -->
+        <section class="sec">
+          <div class="slbl" data-i18n="s03-lbl">03 — Rules Mastery</div>
+          <h2 class="stit" data-i18n="s03-title">
+            Key Rules <span>Yang Harus Dikuasai</span>
+          </h2>
+          <div class="sln"></div>
+          <div class="rg">
+            <div class="rc">
+              <span class="ric">🤖</span>
+              <div>
+                <h4>Autonomous Only</h4>
+                <p data-i18n="r1-p">
+                  Robot bergerak mandiri penuh sejak tombol start ditekan —
+                  tidak ada kontrol manual sama sekali.
+                </p>
+              </div>
+            </div>
+            <div class="rc">
+              <span class="ric">⏱️</span>
+              <div>
+                <h4>2-Minute Run</h4>
+                <p data-i18n="r2-p">
+                  Total waktu 2 menit. Urutan misi dan efisiensi rute sangat
+                  menentukan total skor akhir.
+                </p>
+              </div>
+            </div>
+            <div class="rc">
+              <span class="ric">📦</span>
+              <div>
+                <h4>Size 250³ mm</h4>
+                <p data-i18n="r3-p">
+                  Robot wajib muat dalam kubus 250×250×250 mm saat ditempatkan
+                  di starting position.
+                </p>
+              </div>
+            </div>
+            <div class="rc">
+              <span class="ric">⚙️</span>
+              <div>
+                <h4>Max 6 Motors</h4>
+                <p data-i18n="r4-p">
+                  Senior boleh pakai hingga 6 motor — lebih banyak dari
+                  Elementary (4) dan Junior (5).
+                </p>
+              </div>
+            </div>
+            <div class="rc">
+              <span class="ric">🎨</span>
+              <div>
+                <h4>Color Sensor</h4>
+                <p data-i18n="r5-p">
+                  Gunakan color sensor LEGO Spike untuk deteksi warna tile dan
+                  cement di lapangan.
+                </p>
+              </div>
+            </div>
+            <div class="rc">
+              <span class="ric">🎲</span>
+              <div>
+                <h4>Dual Randomization</h4>
+                <p data-i18n="r6-p">
+                  Pola mosaic DAN posisi cement diacak setiap ronde — robot
+                  harus adaptif terhadap keduanya.
+                </p>
+              </div>
+            </div>
+            <div class="rc">
+              <span class="ric">⚖️</span>
+              <div>
+                <h4>Weight ≤ 1.5 kg</h4>
+                <p data-i18n="r7-p">
+                  Total berat robot max 1.5 kg. Baterai maks 6.000 mAh, tegangan
+                  ≤14V, arus ≤4A.
+                </p>
+              </div>
+            </div>
+            <div class="rc">
+              <span class="ric">📋</span>
+              <div>
+                <h4>Technical Summary</h4>
+                <p data-i18n="r8-p">
+                  Tim wajib dokumentasikan strategi, sensor, mekanisme, dan kode
+                  untuk dipresentasikan ke juri.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 04 ROADMAP -->
+        <section class="sec">
+          <div class="slbl" data-i18n="s04-lbl">04 — Lesson Roadmap</div>
+          <h2 class="stit" data-i18n="s04-title">
+            20-Session <span>Competition Roadmap</span>
+          </h2>
+          <div class="sln"></div>
+
+          <div class="phlbl ph1">
+            <span class="ptag" data-i18n="ph1-tag">Phase 1 · Foundation</span>
+            <div class="pln"></div>
+            <span class="pnum" data-i18n="ph1-num">Sesi 1–4</span>
+          </div>
+          <div class="slist">
+            <div class="scard ph1c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">01</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 23
+                    Mei
+                  </div>
+                  <span class="scard-output">📄 Mission Map</span>
+                </div>
+                <div class="scard-title">
+                  WRO Senior Rules &amp; Mosaic Masters Strategy
+                </div>
+                <div class="scard-desc" data-i18n="d01">
+                  Pahami semua misi, sistem penilaian, randomisasi ganda, zona
+                  lapangan, dan batasan robot Senior.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph1c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">02</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 24
+                    Mei
+                  </div>
+                  <span class="scard-output">🤖 Working Base</span>
+                </div>
+                <div class="scard-title">Advanced Robot Base Build</div>
+                <div class="scard-desc" data-i18n="d02">
+                  Robot base solid ≤250³ mm dan ≤1.5 kg, rancang layout 6 motor,
+                  lulus uji ukuran WRO.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph1c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">03</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 30
+                    Mei
+                  </div>
+                  <span class="scard-output">💻 Movement Code</span>
+                </div>
+                <div class="scard-title">Precise Movement &amp; Odometry</div>
+                <div class="scard-desc" data-i18n="d03">
+                  Program gerak lurus akurat, belok presisi, odometry, dan
+                  koreksi gyro untuk navigasi lapangan.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph1c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">04</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 31
+                    Mei
+                  </div>
+                  <span class="scard-output">🎨 Sensor Code</span>
+                </div>
+                <div class="scard-title">
+                  Color Sensor Setup &amp; Calibration
+                </div>
+                <div class="scard-desc" data-i18n="d04">
+                  Kalibrasi color sensor LEGO Spike untuk deteksi tile dan
+                  cement, uji akurasi pembacaan warna.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phlbl ph2">
+            <span class="ptag" data-i18n="ph2-tag"
+              >Phase 2 · Mission Build</span
+            >
+            <div class="pln"></div>
+            <span class="pnum" data-i18n="ph2-num">Sesi 5–10</span>
+          </div>
+          <div class="slist">
+            <div class="scard ph2c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">05</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 6
+                    Jun
+                  </div>
+                  <span class="scard-output">🔧 Tool Attachment</span>
+                </div>
+                <div class="scard-title">Tool Delivery Mechanism</div>
+                <div class="scard-desc" data-i18n="d05">
+                  Rancang attachment untuk angkut 3 jenis tool ke 3 area target
+                  berbeda dalam satu run.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph2c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">06</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 7
+                    Jun
+                  </div>
+                  <span class="scard-output">✅ Mission 1 Code</span>
+                </div>
+                <div class="scard-title">Tool Delivery Coding</div>
+                <div class="scard-desc" data-i18n="d06">
+                  Kode rute tool delivery: trowel → sponsor area, bowl →
+                  parking, masonry → start area.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph2c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">07</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 13
+                    Jun
+                  </div>
+                  <span class="scard-output">🧩 Tile Mechanism</span>
+                </div>
+                <div class="scard-title">Mosaic Placement Mechanism</div>
+                <div class="scard-desc" data-i18n="d07">
+                  Gripper/pusher akurat untuk tempatkan mosaic tile ke dalam
+                  frame 4×3 slot dengan presisi.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph2c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">08</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 14
+                    Jun
+                  </div>
+                  <span class="scard-output">🧩 Mosaic Code</span>
+                </div>
+                <div class="scard-title">Mosaic Placement Coding</div>
+                <div class="scard-desc" data-i18n="d08">
+                  Color sensor baca pola mosaic, robot navigasi ke tiap slot dan
+                  letakkan tile sesuai warna target.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph2c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">09</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 20
+                    Jun
+                  </div>
+                  <span class="scard-output">🧱 Cement Code</span>
+                </div>
+                <div class="scard-title">
+                  Cement Delivery Mechanism &amp; Coding
+                </div>
+                <div class="scard-desc" data-i18n="d09">
+                  Attachment pengambil cement elements, kode delivery ke 4 zona
+                  warna target di lapangan.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph2c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">10</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 21
+                    Jun
+                  </div>
+                  <span class="scard-output">🔗 Half-Run v1</span>
+                </div>
+                <div class="scard-title">Integration: Tools + Cement Run</div>
+                <div class="scard-desc" data-i18n="d10">
+                  Gabungkan misi tool delivery dan cement delivery dalam satu
+                  rute efisien dan teruji.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phlbl ph3">
+            <span class="ptag" data-i18n="ph3-tag"
+              >Phase 3 · Advanced Coding</span
+            >
+            <div class="pln"></div>
+            <span class="pnum" data-i18n="ph3-num">Sesi 11–14</span>
+          </div>
+          <div class="slist">
+            <div class="scard ph3c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">11</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 27
+                    Jun
+                  </div>
+                  <span class="scard-output">🎨 Pattern Algo</span>
+                </div>
+                <div class="scard-title">Mosaic Pattern Detection</div>
+                <div class="scard-desc" data-i18n="d11">
+                  Color sensor scan pola mosaic di frame, petakan warna ke grid
+                  4×3, simpan ke variabel kode.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph3c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">12</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 28
+                    Jun
+                  </div>
+                  <span class="scard-output">🎲 Adaptive Code</span>
+                </div>
+                <div class="scard-title">Adaptive Mosaic Placement Logic</div>
+                <div class="scard-desc" data-i18n="d12">
+                  Logika kondisional untuk merespons dan menempatkan tile sesuai
+                  pola berbeda setiap ronde.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph3c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">13</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 4
+                    Jul
+                  </div>
+                  <span class="scard-output">🔗 Half-Run v2</span>
+                </div>
+                <div class="scard-title">Integration 1: Tools + Mosaic</div>
+                <div class="scard-desc" data-i18n="d13">
+                  Full run misi 1 dan 2: tool delivery + mosaic placement
+                  selesai dalam satu jalur terintegrasi.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph3c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">14</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 5
+                    Jul
+                  </div>
+                  <span class="scard-output">🛡️ Barrier Guard</span>
+                </div>
+                <div class="scard-title">
+                  Integration 2: Cement + Barrier Guard
+                </div>
+                <div class="scard-desc" data-i18n="d14">
+                  Gabungkan cement delivery dengan strategi aktif lindungi 4
+                  barriers untuk maksimalkan bonus.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phlbl ph4">
+            <span class="ptag" data-i18n="ph4-tag">Phase 4 · Optimization</span>
+            <div class="pln"></div>
+            <span class="pnum" data-i18n="ph4-num">Sesi 15–18</span>
+          </div>
+          <div class="slist">
+            <div class="scard ph4c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">15</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 11
+                    Jul
+                  </div>
+                  <span class="scard-output">🗺️ Final Route</span>
+                </div>
+                <div class="scard-title">
+                  Full Route Planning &amp; Scoring Strategy
+                </div>
+                <div class="scard-desc" data-i18n="d15">
+                  Tentukan urutan misi optimal berdasarkan kalkulasi poin,
+                  waktu, dan tingkat keandalan tiap misi.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph4c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">16</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 12
+                    Jul
+                  </div>
+                  <span class="scard-output">⚡ Tuned Code</span>
+                </div>
+                <div class="scard-title">Speed &amp; Precision Tuning</div>
+                <div class="scard-desc" data-i18n="d16">
+                  Fine-tune kecepatan motor, akurasi sensor, alignment, gripper
+                  timing, dan keseluruhan rute.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph4c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">17</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 18
+                    Jul
+                  </div>
+                  <span class="scard-output">📊 Success Rate</span>
+                </div>
+                <div class="scard-title">Dual Randomization Test Day</div>
+                <div class="scard-desc" data-i18n="d17">
+                  Latihan intensif dengan variasi pola mosaic dan posisi cement
+                  berbeda-beda, catat success rate.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph4c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">18</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 19
+                    Jul
+                  </div>
+                  <span class="scard-output">🧠 Adaptive Run</span>
+                </div>
+                <div class="scard-title">Surprise Rule Challenge</div>
+                <div class="scard-desc" data-i18n="d18">
+                  Adaptasi robot dan kode dalam waktu terbatas, simulasi
+                  perubahan aturan mendadak WRO nyata.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phlbl ph5">
+            <span class="ptag" data-i18n="ph5-tag"
+              >Phase 5 · Competition Ready</span
+            >
+            <div class="pln"></div>
+            <span class="pnum" data-i18n="ph5-num">Sesi 19–20</span>
+          </div>
+          <div class="slist">
+            <div class="scard ph5c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">19</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sat" data-i18n="sat">Sabtu</span> 25
+                    Jul
+                  </div>
+                  <span class="scard-output">🥇 Mock Score</span>
+                </div>
+                <div class="scard-title">🏆 Full Mock Competition</div>
+                <div class="scard-desc" data-i18n="d19">
+                  Practice → robot check → quarantine → 2-min run → scoring →
+                  refleksi tim lengkap.
+                </div>
+              </div>
+            </div>
+            <div class="scard ph5c">
+              <div class="scard-bar"></div>
+              <div class="scard-inner">
+                <div class="scard-top">
+                  <div class="scard-num">20</div>
+                  <div class="scard-date">
+                    <span class="scard-day-sun" data-i18n="sun">Minggu</span> 26
+                    Jul
+                  </div>
+                  <span class="scard-output">📋 Tech Doc</span>
+                </div>
+                <div class="scard-title">
+                  Final Refinement &amp; Tech Summary
+                </div>
+                <div class="scard-desc" data-i18n="d20">
+                  Finalisasi robot, kode, rute, dan persiapan presentasi
+                  Technical Summary ke juri kompetisi.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 05 OUTCOMES -->
+        <section class="sec">
+          <div class="slbl" data-i18n="s05-lbl">05 — Learning Outcomes</div>
+          <h2 class="stit" data-i18n="s05-title">
+            Yang Akan <span>Siswa Kuasai</span>
+          </h2>
+          <div class="sln"></div>
+          <div class="outg">
+            <div class="outi">
+              <div class="outn">01</div>
+              <div class="outt" data-i18n="o1">
+                Membangun robot Senior yang stabil, ≤250³ mm, ≤1.5 kg, dengan
+                layout 6 motor
+              </div>
+            </div>
+            <div class="outi">
+              <div class="outn">02</div>
+              <div class="outt" data-i18n="o2">
+                Menggunakan color sensor LEGO Spike untuk deteksi warna tiles,
+                cement, dan pola mosaic
+              </div>
+            </div>
+            <div class="outi">
+              <div class="outn">03</div>
+              <div class="outt" data-i18n="o3">
+                Merancang attachment untuk angkut 3 jenis tool ke 3 area target
+                berbeda
+              </div>
+            </div>
+            <div class="outi">
+              <div class="outn">04</div>
+              <div class="outt" data-i18n="o4">
+                Mendeteksi pola mosaic dengan color sensor dan menempatkan tiles
+                secara presisi ke frame
+              </div>
+            </div>
+            <div class="outi">
+              <div class="outn">05</div>
+              <div class="outt" data-i18n="o5">
+                Mengirimkan cement elements ke cement target area sesuai warna
+                yang tepat
+              </div>
+            </div>
+            <div class="outi">
+              <div class="outn">06</div>
+              <div class="outt" data-i18n="o6">
+                Menangani randomisasi ganda (pola mosaic + posisi cement) dengan
+                logika adaptif
+              </div>
+            </div>
+            <div class="outi">
+              <div class="outn">07</div>
+              <div class="outt" data-i18n="o7">
+                Mempertahankan 4 barriers tidak rusak sepanjang run untuk bonus
+                maksimal
+              </div>
+            </div>
+            <div class="outi">
+              <div class="outn">08</div>
+              <div class="outt" data-i18n="o8">
+                Menyusun Technical Summary dan mempresentasikan strategi robot
+                kepada juri
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 06 CHECKLIST -->
+        <section class="sec">
+          <div class="slbl" data-i18n="s06-lbl">06 — Competition Readiness</div>
+          <h2 class="stit" data-i18n="s06-title">
+            Pre-Competition <span>Readiness Checklist</span>
+          </h2>
+          <div class="sln"></div>
+          <div class="clw">
+            <p data-i18n="cl-intro">
+              Sebelum hari kompetisi, pastikan semua poin berikut sudah
+              terpenuhi oleh seluruh tim.
+            </p>
+            <div class="clg">
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl1">
+                  <strong>Robot Passes Size &amp; Weight</strong>Muat dalam
+                  250×250×250 mm dan berat ≤1.5 kg
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl2">
+                  <strong>All 3 Missions Coded</strong>Tool delivery, mosaic
+                  placement, dan cement delivery sudah berjalan
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl3">
+                  <strong>Mosaic Pattern Detection</strong>Color sensor baca dan
+                  respons pola mosaic yang berubah setiap ronde
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl4">
+                  <strong>Cement Randomization Handled</strong>Robot akurat
+                  kirim cement meski posisi di storage berubah
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl5">
+                  <strong>All 4 Barriers Protected</strong>Tidak ada barrier
+                  yang tersentuh selama full run
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl6">
+                  <strong>Consistent Full Run</strong>Robot selesaikan rute
+                  penuh minimal 3× berturut-turut
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl7">
+                  <strong>Technical Summary Ready</strong>Dokumentasi mekanisme,
+                  sensor, strategi, kode siap untuk juri
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl8">
+                  <strong>Team Can Explain Code</strong>Setiap anggota mampu
+                  jelaskan logika kode dengan percaya diri
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl9">
+                  <strong>Mock Competition Done</strong>Tim sudah selesaikan
+                  minimal 1 full mock competition run
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl10">
+                  <strong>Backup Plan Ready</strong>Ada strategi cadangan jika
+                  misi mosaic atau cement gagal
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl11">
+                  <strong>Max 6 Motors Verified</strong>Jumlah motor (termasuk
+                  dalam komponen) tidak melebihi 6
+                </div>
+              </div>
+              <div class="chi">
+                <div class="chb">✦</div>
+                <div class="cht" data-i18n="cl12">
+                  <strong>Battery &amp; Voltage Checked</strong>Baterai ≤6.000
+                  mAh, tegangan ≤14V, arus ≤4A
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FOOTER -->
+        <div class="ftr">
+          <div>
+            <div class="fbr">KODECOON 2026</div>
+            <div class="fn" style="margin-top: 5px" data-i18n="ft-sub">
+              WRO Senior RoboMission — Program Persiapan Resmi
+            </div>
+          </div>
+          <div style="text-align: right">
+            <div class="fn" data-i18n="ft-prog">
+              Program: <span>23 Mei — 26 Juli 2025</span>
+            </div>
+            <div class="fn" style="margin-top: 3px" data-i18n="ft-sched">
+              20 Sesi · 2 Jam · Sabtu &amp; Minggu
+            </div>
+            <div class="fn" style="margin-top: 3px" data-i18n="ft-age">
+              Usia: <span>14–19 Tahun</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /pg -->
+    </div>
+    <!-- /W -->
+
+    <script>
+      const T = {
+        toggle: { id: "🇮🇩 Indonesia", en: "🇬🇧 English" },
+        badge: {
+          id: "WRO 2026 &nbsp;·&nbsp; Senior RoboMission &nbsp;·&nbsp; Program Resmi",
+          en: "WRO 2026 &nbsp;·&nbsp; Senior RoboMission &nbsp;·&nbsp; Official Prep",
+        },
+        hsub: { id: "Senior Competition Prep", en: "Senior Competition Prep" },
+        hdesc: {
+          id: "Program intensif 20 sesi untuk tim Senior menghadapi WRO 2026 RoboMission — dari build robot canggih, color sensor, mosaic placement, hingga mock competition.",
+          en: "Intensive 20-session program preparing Senior teams for WRO 2026 RoboMission — from advanced robot build, color sensor, mosaic placement, to mock competition.",
+        },
+        "s1-vl": { id: "20 Sesi", en: "20 Sessions" },
+        "s1-lb": { id: "Total Sessions", en: "Total Sessions" },
+        "s2-vl": { id: "2 Jam", en: "2 Hours" },
+        "s2-lb": { id: "Per Sesi", en: "Per Session" },
+        "s3-vl": { id: "Sab & Min", en: "Sat & Sun" },
+        "s3-lb": { id: "Mulai 23 Mei", en: "Starting May 23" },
+        "s4-lb": { id: "Target Usia", en: "Target Age" },
+        "s5-lb": { id: "Skor Maks", en: "Max Score" },
+        "s01-lbl": { id: "01 — Program Overview", en: "01 — Program Overview" },
+        "s01-title": {
+          id: "Tentang <span>Program Ini</span>",
+          en: "About <span>This Program</span>",
+        },
+        "ov1-ds": {
+          id: "Robot bertenaga tinggi dengan hingga 6 motor, 250³ mm, bobot ≤1.5 kg.",
+          en: "High-performance robot with up to 6 motors, 250³ mm, weight ≤1.5 kg.",
+        },
+        "ov2-ds": {
+          id: "Deteksi warna mosaic tiles dan cement menggunakan color sensor LEGO Spike.",
+          en: "Detect mosaic tile and cement colors using the LEGO Spike color sensor.",
+        },
+        "ov3-ds": {
+          id: "Susun tiles ke mosaic frame sesuai pola yang dirandomisasi tiap ronde.",
+          en: "Place tiles into the mosaic frame matching the randomized pattern each round.",
+        },
+        "ov4-ds": {
+          id: "Kirim 40 cement elements ke cement target area sesuai warna.",
+          en: "Deliver 40 cement elements to the matching-color cement target areas.",
+        },
+        "ov5-ds": {
+          id: "Simulasi penuh: check → quarantine → 2-menit run → scoring → refleksi.",
+          en: "Full simulation: check → quarantine → 2-min run → scoring → reflection.",
+        },
+        "s02-lbl": {
+          id: "02 — Challenge Summary",
+          en: "02 — Challenge Summary",
+        },
+        "s02-title": {
+          id: "WRO 2026 Senior <span>Mission Breakdown</span>",
+          en: "WRO 2026 Senior <span>Mission Breakdown</span>",
+        },
+        "tag-run": { id: "⏱️ 2 Menit Run", en: "⏱️ 2-Minute Run" },
+        "m1-p": {
+          id: 'Bawa 3 alat ke area target masing-masing:<br><strong style="color:var(--gold)">Rectangular trowel</strong> → Sponsor Area<br><strong style="color:var(--gold)">Cement bowl</strong> → Parking Space<br><strong style="color:var(--gold)">Masonry trowel</strong> → Start Area',
+          en: 'Bring 3 tools to their target areas:<br><strong style="color:var(--gold)">Rectangular trowel</strong> → Sponsor Area<br><strong style="color:var(--gold)">Cement bowl</strong> → Parking Space<br><strong style="color:var(--gold)">Masonry trowel</strong> → Start Area',
+        },
+        "m2-p": {
+          id: 'Susun <strong style="color:var(--blue)">mosaic tiles</strong> (kuning, biru, hijau, putih) ke mosaic frame sesuai pola yang <em>dirandomisasi</em> tiap ronde.',
+          en: 'Place <strong style="color:var(--blue)">mosaic tiles</strong> (yellow, blue, green, white) into the mosaic frame matching the <em>randomized</em> pattern each round.',
+        },
+        "m3-p": {
+          id: 'Antarkan <strong style="color:var(--green)">cement elements</strong> ke cement target area sesuai warnanya. Posisi acak setiap ronde.',
+          en: 'Deliver <strong style="color:var(--green)">cement elements</strong> to the matching-color cement target areas. Position is randomized each round.',
+        },
+        "m4-p": {
+          id: 'Jaga agar semua <strong style="color:var(--purple)">4 barriers</strong> (2 merah & 2 hitam) tidak dipindahkan atau rusak.',
+          en: 'Keep all <strong style="color:var(--purple)">4 barriers</strong> (2 red & 2 black) from being moved or damaged.',
+        },
+        "tsb-lbl": { id: "Total Skor Maksimum", en: "Maximum Total Score" },
+        "s03-lbl": { id: "03 — Rules Mastery", en: "03 — Rules Mastery" },
+        "s03-title": {
+          id: "Key Rules <span>Yang Harus Dikuasai</span>",
+          en: "Key Rules <span>You Must Master</span>",
+        },
+        "r1-p": {
+          id: "Robot bergerak mandiri penuh sejak tombol start ditekan — tidak ada kontrol manual sama sekali.",
+          en: "The robot moves fully autonomously once start is pressed — no manual control whatsoever.",
+        },
+        "r2-p": {
+          id: "Total waktu 2 menit. Urutan misi dan efisiensi rute sangat menentukan total skor akhir.",
+          en: "Total run time is 2 minutes. Mission order and route efficiency heavily determine the final score.",
+        },
+        "r3-p": {
+          id: "Robot wajib muat dalam kubus 250×250×250 mm saat ditempatkan di starting position.",
+          en: "The robot must fit inside a 250×250×250 mm cube when placed at the starting position.",
+        },
+        "r4-p": {
+          id: "Senior boleh pakai hingga 6 motor — lebih banyak dari Elementary (4) dan Junior (5).",
+          en: "Senior teams can use up to 6 motors — more than Elementary (4) and Junior (5).",
+        },
+        "r5-p": {
+          id: "Gunakan color sensor LEGO Spike untuk deteksi warna tile dan cement di lapangan.",
+          en: "Use the LEGO Spike color sensor to detect tile and cement colors on the field.",
+        },
+        "r6-p": {
+          id: "Pola mosaic DAN posisi cement diacak setiap ronde — robot harus adaptif terhadap keduanya.",
+          en: "Both the mosaic pattern AND cement positions are randomized each round — the robot must adapt to both.",
+        },
+        "r7-p": {
+          id: "Total berat robot max 1.5 kg. Baterai maks 6.000 mAh, tegangan ≤14V, arus ≤4A.",
+          en: "Max robot weight 1.5 kg. Battery max 6,000 mAh, voltage ≤14V, current ≤4A.",
+        },
+        "r8-p": {
+          id: "Tim wajib dokumentasikan strategi, sensor, mekanisme, dan kode untuk dipresentasikan ke juri.",
+          en: "Teams must document strategy, sensors, mechanisms, and code to present to judges.",
+        },
+        "s04-lbl": { id: "04 — Lesson Roadmap", en: "04 — Lesson Roadmap" },
+        "s04-title": {
+          id: "20-Session <span>Competition Roadmap</span>",
+          en: "20-Session <span>Competition Roadmap</span>",
+        },
+        "ph1-tag": { id: "Phase 1 · Foundation", en: "Phase 1 · Foundation" },
+        "ph1-num": { id: "Sesi 1–4", en: "Sessions 1–4" },
+        "ph2-tag": {
+          id: "Phase 2 · Mission Build",
+          en: "Phase 2 · Mission Build",
+        },
+        "ph2-num": { id: "Sesi 5–10", en: "Sessions 5–10" },
+        "ph3-tag": {
+          id: "Phase 3 · Advanced Coding",
+          en: "Phase 3 · Advanced Coding",
+        },
+        "ph3-num": { id: "Sesi 11–14", en: "Sessions 11–14" },
+        "ph4-tag": {
+          id: "Phase 4 · Optimization",
+          en: "Phase 4 · Optimization",
+        },
+        "ph4-num": { id: "Sesi 15–18", en: "Sessions 15–18" },
+        "ph5-tag": {
+          id: "Phase 5 · Competition Ready",
+          en: "Phase 5 · Competition Ready",
+        },
+        "ph5-num": { id: "Sesi 19–20", en: "Sessions 19–20" },
+        sat: { id: "Sabtu", en: "Saturday" },
+        sun: { id: "Minggu", en: "Sunday" },
+        d01: {
+          id: "Pahami semua misi, sistem penilaian, randomisasi ganda, zona lapangan, dan batasan robot Senior.",
+          en: "Understand all missions, scoring system, dual randomization, field zones, and Senior robot limits.",
+        },
+        d02: {
+          id: "Robot base solid ≤250³ mm dan ≤1.5 kg, rancang layout 6 motor, lulus uji ukuran WRO.",
+          en: "Solid robot base ≤250³ mm and ≤1.5 kg, design 6-motor layout, pass the WRO size inspection.",
+        },
+        d03: {
+          id: "Program gerak lurus akurat, belok presisi, odometry, dan koreksi gyro untuk navigasi lapangan.",
+          en: "Program accurate straight movement, precise turns, odometry, and gyro correction for field navigation.",
+        },
+        d04: {
+          id: "Kalibrasi color sensor LEGO Spike untuk deteksi tile dan cement, uji akurasi pembacaan warna.",
+          en: "Calibrate the LEGO Spike color sensor for tile and cement detection, test color-reading accuracy.",
+        },
+        d05: {
+          id: "Rancang attachment untuk angkut 3 jenis tool ke 3 area target berbeda dalam satu run.",
+          en: "Design an attachment to carry all 3 tools to their 3 different target areas in one run.",
+        },
+        d06: {
+          id: "Kode rute tool delivery: trowel → sponsor area, bowl → parking, masonry → start area.",
+          en: "Code the tool delivery route: trowel → sponsor area, bowl → parking, masonry → start area.",
+        },
+        d07: {
+          id: "Gripper/pusher akurat untuk tempatkan mosaic tile ke dalam frame 4×3 slot dengan presisi.",
+          en: "Accurate gripper/pusher to place mosaic tiles into the 4×3 slot frame with precision.",
+        },
+        d08: {
+          id: "Color sensor baca pola mosaic, robot navigasi ke tiap slot dan letakkan tile sesuai warna target.",
+          en: "Color sensor reads the mosaic pattern, robot navigates to each slot and places the matching tile.",
+        },
+        d09: {
+          id: "Attachment pengambil cement elements, kode delivery ke 4 zona warna target di lapangan.",
+          en: "Cement element pickup attachment, code delivery to all 4 colored target zones on the field.",
+        },
+        d10: {
+          id: "Gabungkan misi tool delivery dan cement delivery dalam satu rute efisien dan teruji.",
+          en: "Combine tool delivery and cement delivery missions into one efficient, tested route.",
+        },
+        d11: {
+          id: "Color sensor scan pola mosaic di frame, petakan warna ke grid 4×3, simpan ke variabel kode.",
+          en: "Color sensor scans the mosaic frame pattern, maps colors to a 4×3 grid, saves to code variables.",
+        },
+        d12: {
+          id: "Logika kondisional untuk merespons dan menempatkan tile sesuai pola berbeda setiap ronde.",
+          en: "Conditional logic to respond and place tiles according to the different pattern each round.",
+        },
+        d13: {
+          id: "Full run misi 1 dan 2: tool delivery + mosaic placement selesai dalam satu jalur terintegrasi.",
+          en: "Full run of missions 1 & 2: tool delivery + mosaic placement completed in one integrated path.",
+        },
+        d14: {
+          id: "Gabungkan cement delivery dengan strategi aktif lindungi 4 barriers untuk maksimalkan bonus.",
+          en: "Combine cement delivery with an active strategy to protect all 4 barriers and maximize the bonus.",
+        },
+        d15: {
+          id: "Tentukan urutan misi optimal berdasarkan kalkulasi poin, waktu, dan tingkat keandalan tiap misi.",
+          en: "Determine the optimal mission order based on point calculations, time, and reliability of each mission.",
+        },
+        d16: {
+          id: "Fine-tune kecepatan motor, akurasi sensor, alignment, gripper timing, dan keseluruhan rute.",
+          en: "Fine-tune motor speed, sensor accuracy, alignment, gripper timing, and the overall route.",
+        },
+        d17: {
+          id: "Latihan intensif dengan variasi pola mosaic dan posisi cement berbeda-beda, catat success rate.",
+          en: "Intensive practice with varied mosaic patterns and cement positions, record success rate.",
+        },
+        d18: {
+          id: "Adaptasi robot dan kode dalam waktu terbatas, simulasi perubahan aturan mendadak WRO nyata.",
+          en: "Adapt robot and code under time pressure, simulating sudden rule changes in a real WRO scenario.",
+        },
+        d19: {
+          id: "Practice → robot check → quarantine → 2-min run → scoring → refleksi tim lengkap.",
+          en: "Practice → robot check → quarantine → 2-min run → scoring → full team debrief.",
+        },
+        d20: {
+          id: "Finalisasi robot, kode, rute, dan persiapan presentasi Technical Summary ke juri kompetisi.",
+          en: "Finalize robot, code, route, and prepare the Technical Summary presentation for competition judges.",
+        },
+        "s05-lbl": {
+          id: "05 — Learning Outcomes",
+          en: "05 — Learning Outcomes",
+        },
+        "s05-title": {
+          id: "Yang Akan <span>Siswa Kuasai</span>",
+          en: "What <span>Students Will Master</span>",
+        },
+        o1: {
+          id: "Membangun robot Senior yang stabil, ≤250³ mm, ≤1.5 kg, dengan layout 6 motor",
+          en: "Build a stable Senior robot, ≤250³ mm, ≤1.5 kg, with a 6-motor layout",
+        },
+        o2: {
+          id: "Menggunakan color sensor LEGO Spike untuk deteksi warna tiles, cement, dan pola mosaic",
+          en: "Use the LEGO Spike color sensor to detect tile, cement, and mosaic pattern colors",
+        },
+        o3: {
+          id: "Merancang attachment untuk angkut 3 jenis tool ke 3 area target berbeda",
+          en: "Design an attachment to carry 3 types of tools to 3 different target areas",
+        },
+        o4: {
+          id: "Mendeteksi pola mosaic dengan color sensor dan menempatkan tiles secara presisi ke frame",
+          en: "Detect the mosaic pattern with the color sensor and place tiles precisely into the frame",
+        },
+        o5: {
+          id: "Mengirimkan cement elements ke cement target area sesuai warna yang tepat",
+          en: "Deliver cement elements to the correct color-matching cement target areas",
+        },
+        o6: {
+          id: "Menangani randomisasi ganda (pola mosaic + posisi cement) dengan logika adaptif",
+          en: "Handle dual randomization (mosaic pattern + cement positions) with adaptive logic",
+        },
+        o7: {
+          id: "Mempertahankan 4 barriers tidak rusak sepanjang run untuk bonus maksimal",
+          en: "Keep all 4 barriers undamaged throughout the run for maximum bonus points",
+        },
+        o8: {
+          id: "Menyusun Technical Summary dan mempresentasikan strategi robot kepada juri",
+          en: "Prepare a Technical Summary and present the robot strategy to judges",
+        },
+        "s06-lbl": {
+          id: "06 — Competition Readiness",
+          en: "06 — Competition Readiness",
+        },
+        "s06-title": {
+          id: "Pre-Competition <span>Readiness Checklist</span>",
+          en: "Pre-Competition <span>Readiness Checklist</span>",
+        },
+        "cl-intro": {
+          id: "Sebelum hari kompetisi, pastikan semua poin berikut sudah terpenuhi oleh seluruh tim.",
+          en: "Before competition day, make sure every item below is checked off by the entire team.",
+        },
+        cl1: {
+          id: "<strong>Robot Passes Size &amp; Weight</strong>Muat dalam 250×250×250 mm dan berat ≤1.5 kg",
+          en: "<strong>Robot Passes Size &amp; Weight</strong>Fits within 250×250×250 mm and weighs ≤1.5 kg",
+        },
+        cl2: {
+          id: "<strong>All 3 Missions Coded</strong>Tool delivery, mosaic placement, dan cement delivery sudah berjalan",
+          en: "<strong>All 3 Missions Coded</strong>Tool delivery, mosaic placement, and cement delivery are running",
+        },
+        cl3: {
+          id: "<strong>Mosaic Pattern Detection</strong>Color sensor baca dan respons pola mosaic yang berubah setiap ronde",
+          en: "<strong>Mosaic Pattern Detection</strong>Color sensor reads and responds to the changed mosaic pattern each round",
+        },
+        cl4: {
+          id: "<strong>Cement Randomization Handled</strong>Robot akurat kirim cement meski posisi di storage berubah",
+          en: "<strong>Cement Randomization Handled</strong>Robot accurately delivers cement even when storage positions change",
+        },
+        cl5: {
+          id: "<strong>All 4 Barriers Protected</strong>Tidak ada barrier yang tersentuh selama full run",
+          en: "<strong>All 4 Barriers Protected</strong>No barrier is touched or moved during the full run",
+        },
+        cl6: {
+          id: "<strong>Consistent Full Run</strong>Robot selesaikan rute penuh minimal 3× berturut-turut",
+          en: "<strong>Consistent Full Run</strong>Robot completes the full route at least 3 times in a row",
+        },
+        cl7: {
+          id: "<strong>Technical Summary Ready</strong>Dokumentasi mekanisme, sensor, strategi, kode siap untuk juri",
+          en: "<strong>Technical Summary Ready</strong>Mechanism, sensor, strategy, and code documentation ready for judges",
+        },
+        cl8: {
+          id: "<strong>Team Can Explain Code</strong>Setiap anggota mampu jelaskan logika kode dengan percaya diri",
+          en: "<strong>Team Can Explain Code</strong>Every member can confidently explain the code logic",
+        },
+        cl9: {
+          id: "<strong>Mock Competition Done</strong>Tim sudah selesaikan minimal 1 full mock competition run",
+          en: "<strong>Mock Competition Done</strong>Team has completed at least 1 full mock competition run",
+        },
+        cl10: {
+          id: "<strong>Backup Plan Ready</strong>Ada strategi cadangan jika misi mosaic atau cement gagal",
+          en: "<strong>Backup Plan Ready</strong>Backup strategy exists if the mosaic or cement mission fails",
+        },
+        cl11: {
+          id: "<strong>Max 6 Motors Verified</strong>Jumlah motor (termasuk dalam komponen) tidak melebihi 6",
+          en: "<strong>Max 6 Motors Verified</strong>Total motor count (including those inside components) does not exceed 6",
+        },
+        cl12: {
+          id: "<strong>Battery &amp; Voltage Checked</strong>Baterai ≤6.000 mAh, tegangan ≤14V, arus ≤4A",
+          en: "<strong>Battery &amp; Voltage Checked</strong>Battery ≤6,000 mAh, voltage ≤14V, current ≤4A",
+        },
+        "ft-sub": {
+          id: "WRO Senior RoboMission — Program Persiapan Resmi",
+          en: "WRO Senior RoboMission — Official Competition Prep",
+        },
+        "ft-prog": {
+          id: "Program: <span>23 Mei — 26 Juli 2025</span>",
+          en: "Program: <span>May 23 — Jul 26, 2025</span>",
+        },
+        "ft-sched": {
+          id: "20 Sesi · 2 Jam · Sabtu & Minggu",
+          en: "20 Sessions · 2 Hrs · Sat & Sun",
+        },
+        "ft-age": {
+          id: "Usia: <span>14–19 Tahun</span>",
+          en: "Age: <span>14–19 Years</span>",
+        },
+      };
+
+      let lang = "id";
+
+      function setLang(l) {
+        lang = l;
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (T[key]) el.innerHTML = T[key][l];
+        });
+        document
+          .getElementById("btn-id")
+          .classList.toggle("active", l === "id");
+        document
+          .getElementById("btn-en")
+          .classList.toggle("active", l === "en");
+        document.documentElement.lang = l === "id" ? "id" : "en";
+      }
+    </script>
+  </body>
+</html>

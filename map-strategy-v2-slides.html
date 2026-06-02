@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WRO 2026 — Mosaic Masters Strategy</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#050a0e; --surf:#0d1821; --card:#101e2b; --border:#1a2e3e;
+  --cyan:#00d4ff; --green:#00ff9d; --warn:#ffcc00; --red:#ff4455;
+  --pink:#f43f8f; --orange:#f97316; --purple:#a855f7;
+  --text:#d8eaf4; --muted:#5a7a8a; --code:#7de8ff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;
+  height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,212,255,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,0.025) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;z-index:0;}
+
+/* ── DECK ── */
+.deck{flex:1;position:relative;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  padding:32px 64px 64px;
+  opacity:0;pointer-events:none;
+  transition:opacity .45s ease,transform .45s ease;
+  transform:translateX(60px);z-index:1;}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.slide.out{opacity:0;transform:translateX(-60px);
+  transition:opacity .28s ease,transform .28s ease;}
+
+/* ── NAV ── */
+.nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:12px;z-index:100;}
+.nav-btn{background:rgba(0,212,255,0.08);border:1px solid var(--cyan);
+  color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:12px;
+  padding:8px 20px;cursor:pointer;letter-spacing:.08em;
+  transition:all .2s;}
+.nav-btn:hover{background:rgba(0,212,255,0.18);}
+.nav-btn:disabled{opacity:.25;cursor:default;}
+.slide-counter{font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:var(--muted);padding:0 8px;}
+.dots{display:flex;gap:6px;align-items:center;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--border);
+  cursor:pointer;transition:all .2s;}
+.dot.active{background:var(--cyan);width:18px;border-radius:3px;}
+
+/* ── PROGRESS BAR ── */
+.progress{position:fixed;top:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--green));
+  transition:width .4s ease;z-index:200;}
+
+/* ── COMMON ELEMENTS ── */
+.chip{display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px;border-radius:2px;border:1px solid;
+  font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.08em;}
+.tag{font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:.25em;text-transform:uppercase;}
+.slide-title{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;
+  letter-spacing:.06em;margin-bottom:6px;line-height:1.15;}
+.slide-sub{font-family:'Share Tech Mono',monospace;font-size:11px;
+  letter-spacing:.22em;color:var(--cyan);text-transform:uppercase;
+  margin-bottom:18px;}
+.code-block{background:rgba(0,0,0,0.5);border:1px solid var(--border);
+  border-left:3px solid var(--cyan);padding:14px 18px;
+  font-family:'Share Tech Mono',monospace;font-size:13px;
+  line-height:1.8;color:#c8e8f8;width:100%;max-width:860px;
+  white-space:pre;overflow-x:auto;}
+.code-block .kw{color:var(--cyan);}
+.code-block .fn{color:var(--green);}
+.code-block .str{color:var(--warn);}
+.code-block .cmt{color:var(--muted);}
+.code-block .num{color:var(--pink);}
+.card{background:var(--card);border:1px solid var(--border);padding:18px 20px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:960px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;width:100%;max-width:960px;}
+.label{font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.value{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;}
+.body-text{font-size:15px;line-height:1.65;color:#b0ccd8;max-width:820px;}
+.hl{color:var(--cyan);}
+.hl-g{color:var(--green);}
+.hl-y{color:var(--warn);}
+.hl-p{color:var(--pink);}
+.hl-o{color:var(--orange);}
+.hl-pu{color:var(--purple);}
+
+/* ── FLOW ARROW ── */
+.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;
+  width:100%;max-width:920px;}
+.flow-box{padding:10px 18px;border:1px solid;font-size:13px;
+  font-family:'Rajdhani',sans-serif;font-weight:600;
+  letter-spacing:.04em;text-align:center;flex:1;min-width:100px;}
+.flow-arr{color:var(--muted);font-size:18px;padding:0 6px;flex-shrink:0;}
+
+/* ── SCAN LINE (title slide) ── */
+.scan-line{
+  position:absolute;width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--green),transparent);
+  animation:scanMove 3s ease-in-out infinite;
+  opacity:0.45;pointer-events:none;z-index:0;}
+@keyframes scanMove{
+  0%  {top:8%;opacity:0;}
+  10% {opacity:0.45;}
+  50% {top:88%;opacity:0.45;}
+  90% {opacity:0.45;}
+  100%{top:8%;opacity:0;}}
+
+/* ── CORNER DECORATIONS ── */
+.corner-tl,.corner-br{position:absolute;width:22px;height:22px;z-index:2;}
+.corner-tl{top:18px;left:18px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);}
+.corner-br{bottom:18px;right:18px;border-bottom:2px solid var(--muted);border-right:2px solid var(--muted);}
+
+/* ── SCAN GRID (slide 4) ── */
+.scan-grid{display:grid;grid-template-columns:repeat(4,1fr);
+  gap:6px;max-width:440px;width:100%;}
+.scan-cell{aspect-ratio:1;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;
+  position:relative;transition:all .3s;background:rgba(0,0,0,0.3);}
+.scan-cell .idx{position:absolute;top:3px;left:5px;
+  font-size:9px;font-family:'Share Tech Mono',monospace;
+  color:var(--muted);}
+.scan-cell.scanning{
+  border-color:var(--cyan);
+  animation:pulseScan 0.55s ease-in-out infinite;
+  transform:scale(1.05);
+  z-index:2;}
+@keyframes pulseScan{
+  0%,100%{box-shadow:0 0 10px rgba(0,212,255,0.6);border-color:var(--cyan);}
+  50%    {box-shadow:0 0 22px rgba(0,255,157,0.8);border-color:var(--green);}}
+.scan-cell.done-A{background:rgba(220,220,240,0.20);border-color:#cbd5e1;color:#cbd5e1;} /* A = WHITE */
+.scan-cell.done-B{background:rgba(34,197,94,0.25);border-color:#22c55e;color:#22c55e;}       /* B = GREEN */
+.scan-cell.done-C{background:rgba(59,130,246,0.25);border-color:#3b82f6;color:#3b82f6;}      /* C = BLUE */
+.scan-cell.done-D{background:rgba(234,179,8,0.25);border-color:#eab308;color:#eab308;}       /* D = YELLOW */
+.scan-cell.done-Y{background:rgba(234,179,8,0.25);border-color:#eab308;color:#eab308;}
+.scan-cell.done-G{background:rgba(34,197,94,0.25);border-color:#22c55e;color:#22c55e;}
+.scan-cell.done-W{background:rgba(220,220,240,0.20);border-color:#cbd5e1;color:#cbd5e1;}
+
+/* ── LIST ARRAY (slide 5) ── */
+.arr-box{display:flex;gap:0;border:1px solid var(--border);
+  overflow:hidden;max-width:900px;width:100%;}
+.arr-item{flex:1;padding:10px 0;text-align:center;
+  border-right:1px solid var(--border);
+  font-family:'Share Tech Mono',monospace;font-size:12px;
+  transition:all .4s;}
+.arr-item:last-child{border-right:none;}
+.arr-item .ai{font-size:9px;color:var(--muted);display:block;margin-bottom:2px;}
+.arr-item .av{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;}
+.arr-item.color-A{background:rgba(203,213,225,0.10);} /* A = WHITE */
+.arr-item.color-A .av{color:#cbd5e1;}
+.arr-item.color-B{background:rgba(34,197,94,0.15);}   /* B = GREEN */
+.arr-item.color-B .av{color:#22c55e;}
+.arr-item.color-C{background:rgba(59,130,246,0.15);}  /* C = BLUE */
+.arr-item.color-C .av{color:#3b82f6;}
+.arr-item.color-D{background:rgba(234,179,8,0.15);}   /* D = YELLOW */
+.arr-item.color-D .av{color:#eab308;}
+.arr-item.empty .av{color:var(--border);}
+
+/* ── DECISION TREE (slide 7) ── */
+.dtree{display:flex;flex-direction:column;align-items:center;
+  gap:0;width:100%;max-width:780px;}
+.dt-node{padding:10px 24px;border:2px solid;border-radius:2px;
+  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:.04em;text-align:center;min-width:280px;}
+.dt-question{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,0.07);}
+.dt-action{border-color:var(--green);color:var(--green);background:rgba(0,255,157,0.07);}
+.dt-action2{border-color:var(--warn);color:var(--warn);background:rgba(255,204,0,0.07);}
+.dt-action3{border-color:var(--orange);color:var(--orange);background:rgba(249,115,22,0.07);}
+.dt-connector{display:flex;align-items:flex-start;gap:0;width:100%;}
+.dt-branch{display:flex;flex-direction:column;align-items:center;
+  flex:1;gap:0;padding-top:0;}
+.dt-label{font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--muted);letter-spacing:.15em;padding:4px 0;}
+.dt-line{width:1px;height:20px;background:var(--border);}
+.dt-hline{height:1px;background:var(--border);width:100%;}
+
+/* ── SOURCE LANE DIAGRAM (slide 9) ── */
+.lane-diagram{display:flex;align-items:stretch;gap:0;
+  max-width:700px;width:100%;height:320px;}
+.lane-col{display:flex;flex-direction:column;justify-content:space-around;
+  align-items:center;}
+.lane-source{width:120px;padding:12px;border:2px solid;
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;
+  letter-spacing:.04em;text-align:center;position:relative;}
+.lane-connector{width:60px;display:flex;align-items:center;
+  justify-content:center;flex-direction:column;gap:2px;}
+.lane-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);}
+.lane-line{width:1px;flex:1;background:var(--muted);}
+.lane-mosaic{border:2px solid var(--warn);padding:14px 20px;
+  font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;
+  color:var(--warn);text-align:center;background:rgba(255,204,0,0.06);}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div class="deck" id="deck">
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 1 — TITLE
+     ═══════════════════════════════════════════ -->
+<div class="slide active" id="s1">
+  <div class="scan-line"></div>
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div style="text-align:center;max-width:780px;position:relative;z-index:1;">
+    <div class="tag" style="color:var(--cyan);margin-bottom:16px;">WRO 2026 · Senior · RoboMission</div>
+    <h1 style="font-family:'Orbitron',sans-serif;font-size:52px;font-weight:900;
+      letter-spacing:.06em;line-height:1.1;margin-bottom:12px;">
+      MOSAIC<br><span style="color:var(--cyan);">MASTERS</span>
+    </h1>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:14px;
+      letter-spacing:.28em;color:var(--muted);margin-bottom:32px;">
+      FULL STRATEGY BREAKDOWN
+    </div>
+    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
+      <div class="chip" style="color:var(--cyan);border-color:var(--cyan);">120 pts · Mosaic</div>
+      <div class="chip" style="color:var(--green);border-color:var(--green);">45 pts · Tools</div>
+      <div class="chip" style="color:var(--warn);border-color:var(--warn);">40 pts · Cement</div>
+      <div class="chip" style="color:var(--purple);border-color:var(--purple);">28 pts · Barriers</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 2 — THE BIG IDEA: FIFO
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="slide-sub">Core Concept</div>
+  <h2 class="slide-title">The <span style="color:var(--cyan);">FIFO</span> Principle</h2>
+  <div class="body-text" style="margin-bottom:24px;text-align:center;">
+    Our slide carrier works like a <span class="hl">queue</span> — first tile in, first tile out.<br>
+    This one property locks the entire strategy together.
+  </div>
+
+  <div class="flow" style="margin-bottom:24px;">
+    <div class="flow-box" style="color:var(--cyan);border-color:var(--cyan);background:rgba(0,212,255,0.06);">
+      📷 SCAN ORDER<br><small style="font-size:11px;font-weight:400;">serpentine L→R R→L L→R</small>
+    </div>
+    <div class="flow-arr">=</div>
+    <div class="flow-box" style="color:var(--green);border-color:var(--green);background:rgba(0,255,157,0.06);">
+      🤏 PICKUP ORDER<br><small style="font-size:11px;font-weight:400;">collect from sources</small>
+    </div>
+    <div class="flow-arr">=</div>
+    <div class="flow-box" style="color:var(--warn);border-color:var(--warn);background:rgba(255,204,0,0.06);">
+      📦 SLIDE ORDER<br><small style="font-size:11px;font-weight:400;">stored inside carrier</small>
+    </div>
+    <div class="flow-arr">=</div>
+    <div class="flow-box" style="color:var(--pink);border-color:var(--pink);background:rgba(244,63,143,0.06);">
+      🏁 PLACE ORDER<br><small style="font-size:11px;font-weight:400;">released into mosaic</small>
+    </div>
+  </div>
+
+  <div class="card" style="max-width:680px;border-color:var(--cyan);background:rgba(0,212,255,0.04);">
+    <div class="label" style="color:var(--cyan);">Why this works</div>
+    <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+      <li>Collect tiles in <span class="hl">exact same order</span> as the scanned mosaic pattern</li>
+      <li>Robot never needs to sort or re-order anything</li>
+      <li>Release one tile per mosaic cell — done</li>
+      <li>The slide handles <span class="hl">"which color goes here"</span> automatically</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 3 — GO TO MOSAIC
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="slide-sub">Step 1</div>
+  <h2 class="slide-title">Navigate to <span style="color:var(--cyan);">Mosaic Frame</span></h2>
+  <div class="two-col" style="margin-top:4px;">
+    <div>
+      <div class="label">go_to_mosaic() sequence</div>
+      <div class="code-block" style="font-size:12px;">
+<span class="fn">set_gyro_zero</span>()  <span class="cmt"># zero at start</span>
+
+<span class="fn">turn_pivot</span>(<span class="num">50</span>)     <span class="cmt"># angle away from tiles</span>
+<span class="fn">go_until_black</span>()  <span class="cmt"># find first nav line</span>
+
+<span class="fn">turn_pivot</span>(<span class="num">90</span>)
+<span class="fn">set_gyro_zero</span>()   <span class="cmt"># RE-ZERO here</span>
+                  <span class="cmt"># 0° = facing mosaic</span>
+
+<span class="fn">turn_yaw</span>(<span class="num">15</span>)      <span class="cmt"># small correction</span>
+<span class="fn">go_until_black</span>()
+
+<span class="fn">turn_pivot</span>(<span class="num">0</span>)
+<span class="fn">go_until_black</span>()   <span class="cmt"># arrive cell [0]</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card" style="border-color:var(--warn);">
+        <div class="label" style="color:var(--warn);">⚠ Why 50°?</div>
+        <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+          <li>Source D (yellow tiles) sits nearest to the start area</li>
+          <li>A straight exit would crash into the tile stacks</li>
+          <li>50° angles the robot <span class="hl-y">diagonally into open field</span></li>
+          <li>First black line hit = safe entry to the nav lane</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:var(--cyan);">
+        <div class="label" style="color:var(--cyan);">⚡ Why re-zero the gyro?</div>
+        <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+          <li>Initial 50° turn leaves gyro in an awkward offset</li>
+          <li>Re-zero gives clean absolute reference for the whole run</li>
+          <li><span class="hl">0°</span> = facing mosaic / into sources</li>
+          <li><span class="hl">90°</span> = right / south (toward start)</li>
+          <li><span class="hl">−90°</span> = left / north (away from start)</li>
+          <li><span class="hl">180°</span> = back toward the main nav line</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:var(--green);">
+        <div class="label" style="color:var(--green);">✓ End state</div>
+        <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+          <li>Robot at mosaic cell <span class="hl-g">[0]</span> (top-left of frame)</li>
+          <li>Heading locked at <span class="hl-g">0°</span></li>
+          <li>Ready to begin serpentine scan</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 4 — SERPENTINE SCAN
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="slide-sub">Step 2 — scan_mosaic()</div>
+  <h2 class="slide-title">Serpentine <span style="color:var(--cyan);">Scan</span></h2>
+  <div class="two-col" style="align-items:start;gap:32px;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+      <div class="label">3×4 mosaic frame — scan order</div>
+      <div class="scan-grid" id="scanGrid">
+        <!-- cells generated by JS -->
+      </div>
+      <div style="display:flex;gap:16px;margin-top:4px;">
+        <button onclick="startScanAnim()" style="background:rgba(0,212,255,0.12);
+          border:1px solid var(--cyan);color:var(--cyan);
+          font-family:'Orbitron',sans-serif;font-size:10px;
+          padding:7px 16px;cursor:pointer;letter-spacing:.08em;">▶ DEMO SCAN</button>
+        <button onclick="resetScanAnim()" style="background:rgba(90,122,138,0.12);
+          border:1px solid var(--muted);color:var(--muted);
+          font-family:'Orbitron',sans-serif;font-size:10px;
+          padding:7px 16px;cursor:pointer;letter-spacing:.08em;">↺ RESET</button>
+      </div>
+      <div id="scanStatus" style="font-family:'Share Tech Mono',monospace;
+        font-size:11px;color:var(--muted);letter-spacing:.1em;min-height:16px;"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="label">scan_mosaic() logic</div>
+      <div class="code-block" style="font-size:11.5px;">
+<span class="fn">run_scanner_slider</span>()  <span class="cmt"># extend arm</span>
+
+<span class="cmt"># Row 1: left → right</span>
+<span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">4</span>):
+  color = <span class="fn">read_color_at_cell</span>()
+  mosaic_list.append(color)
+  <span class="kw">if</span> i &lt; <span class="num">3</span>: <span class="fn">drive_mm</span>(CELL_WIDTH)
+
+<span class="cmt"># Step to Row 2</span>
+<span class="fn">turn_pivot</span>(<span class="num">90</span>); <span class="fn">drive_mm</span>(ROW_HEIGHT)
+<span class="fn">turn_pivot</span>(<span class="num">180</span>)
+
+<span class="cmt"># Row 2: right → left</span>
+<span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">4</span>):
+  color = <span class="fn">read_color_at_cell</span>()
+  mosaic_list.append(color)
+  <span class="kw">if</span> i &lt; <span class="num">3</span>: <span class="fn">drive_mm</span>(CELL_WIDTH)
+
+<span class="cmt"># Step to Row 3, turn back to 0°</span>
+<span class="fn">turn_pivot</span>(<span class="num">90</span>); <span class="fn">drive_mm</span>(ROW_HEIGHT)
+<span class="fn">turn_pivot</span>(<span class="num">0</span>)
+
+<span class="cmt"># Row 3: left → right (same as row 1)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 5 — mosaic_list[]
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="slide-sub">Step 2 — Output</div>
+  <h2 class="slide-title">Building <span style="color:var(--cyan);">mosaic_list[ ]</span></h2>
+  <div style="width:100%;max-width:900px;margin-bottom:16px;">
+    <div class="label">What gets stored — each cell color mapped to source label</div>
+    <div class="code-block" style="margin-bottom:10px;">
+<span class="cmt"># COLOR_MAP: sensor reading → source label</span>
+COLOR_MAP = {
+  Color.<span class="hl-p">WHITE</span>  : <span class="str">"A"</span>,  <span class="cmt"># source A</span>
+  Color.<span class="hl-g">GREEN</span>  : <span class="str">"B"</span>,  <span class="cmt"># source B</span>
+  Color.<span class="hl" >BLUE</span>   : <span class="str">"C"</span>,  <span class="cmt"># source C</span>
+  Color.<span class="hl-y">YELLOW</span> : <span class="str">"D"</span>,  <span class="cmt"># source D</span>
+}
+    </div>
+  </div>
+
+  <div style="width:100%;max-width:900px;margin-bottom:8px;">
+    <div class="label">Example result — mosaic_list after scanning</div>
+    <div class="arr-box" id="demoArr">
+      <!-- generated by JS -->
+    </div>
+  </div>
+  <div style="display:flex;gap:16px;margin-top:8px;margin-bottom:14px;">
+    <button onclick="fillArr()" style="background:rgba(0,212,255,0.12);
+      border:1px solid var(--cyan);color:var(--cyan);
+      font-family:'Orbitron',sans-serif;font-size:10px;
+      padding:7px 16px;cursor:pointer;letter-spacing:.08em;">▶ FILL LIST</button>
+    <button onclick="resetArr()" style="background:rgba(90,122,138,0.12);
+      border:1px solid var(--muted);color:var(--muted);
+      font-family:'Orbitron',sans-serif;font-size:10px;
+      padding:7px 16px;cursor:pointer;letter-spacing:.08em;">↺ RESET</button>
+  </div>
+  <div class="card" style="max-width:900px;border-color:var(--green);">
+    <div class="label" style="color:var(--green);">This list now controls everything</div>
+    <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+      <li><span class="hl-g">mosaic_list[0]</span> → first tile needed → robot goes to that source first</li>
+      <li><span class="hl-g">mosaic_list[1]</span> → second tile needed → robot goes to that source next</li>
+      <li>Loop runs <span class="hl">12 times</span>, one iteration per tile</li>
+      <li>Order is <span class="hl">never changed</span> — collected exactly as scanned</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 6 — LIST → COLLECTION ORDER
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="slide-sub">Step 3 — collect_all_blocks()</div>
+  <h2 class="slide-title">List → <span style="color:var(--cyan);">Pickup Order</span></h2>
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <div class="label">The collection loop</div>
+      <div class="code-block">
+<span class="kw">for</span> index <span class="kw">in</span> range(<span class="num">12</span>):
+
+  next_color = mosaic_list[index]
+  <span class="cmt"># e.g. "A", "C", "B", "A" ...</span>
+
+  <span class="kw">if</span> current_location == <span class="str">"mosaic"</span>:
+    <span class="fn">go_mosaic_to_source</span>(next_color)
+
+  <span class="kw">elif</span> current_location == next_color:
+    <span class="fn">second_block</span>()     <span class="cmt"># STAY — no travel</span>
+
+  <span class="kw">else</span>:
+    <span class="fn">go_source_to_source</span>(
+      current_location,
+      next_color
+    )
+
+  current_location = next_color  <span class="cmt"># update</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card" style="border-color:var(--cyan);">
+        <div class="label" style="color:var(--cyan);">Example: mosaic_list = ["A","A","C","B"]</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;font-size:13px;">
+          <div><span style="color:var(--muted);">index 0:</span> <span style="color:#cbd5e1;">→ Source A</span> <span style="color:var(--muted);">(from mosaic)</span></div>
+          <div><span style="color:var(--muted);">index 1:</span> <span class="hl-g">STAY at A</span> <span style="color:var(--muted);">(same source! second_block)</span></div>
+          <div><span style="color:var(--muted);">index 2:</span> <span style="color:#3b82f6;">→ Source C</span> <span style="color:var(--muted);">(travel from A)</span></div>
+          <div><span style="color:var(--muted);">index 3:</span> <span style="color:#22c55e;">→ Source B</span> <span style="color:var(--muted);">(travel from C)</span></div>
+        </div>
+      </div>
+      <div class="card" style="border-color:var(--green);">
+        <div class="label" style="color:var(--green);">⚡ second_block() saves time</div>
+        <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+          <li>Two consecutive tiles need same color</li>
+          <li>Robot <span class="hl-g">does NOT leave</span> the source</li>
+          <li>Just turns slightly, grabs the next tile</li>
+          <li>Saves ~3–5 seconds per duplicate pair</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 7 — current_location LOGIC
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="slide-sub">Key Variable</div>
+  <h2 class="slide-title"><span style="color:var(--cyan);">current_location</span> Decision Tree</h2>
+  <div class="two-col" style="align-items:start;gap:28px;">
+    <div class="dtree">
+      <div class="dt-node dt-question">current_location == <span style="color:#fff;">"mosaic"</span> ?</div>
+      <div class="dt-connector" style="margin-top:0;">
+        <div class="dt-branch">
+          <div class="dt-line"></div>
+          <div class="dt-label" style="color:var(--green);">YES</div>
+          <div class="dt-node dt-action" style="min-width:200px;">
+            go_mosaic_to_source(next)
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;text-align:center;">
+            First tile — direct from mosaic
+          </div>
+        </div>
+        <div style="width:40px;display:flex;align-items:flex-start;padding-top:20px;">
+          <div style="width:100%;height:1px;background:var(--border);"></div>
+        </div>
+        <div class="dt-branch">
+          <div class="dt-line"></div>
+          <div class="dt-label" style="color:var(--red);">NO</div>
+          <div class="dt-node dt-question" style="min-width:220px;">
+            current_location == next_color ?
+          </div>
+          <div class="dt-connector" style="margin-top:0;">
+            <div class="dt-branch">
+              <div class="dt-line"></div>
+              <div class="dt-label" style="color:var(--green);">YES</div>
+              <div class="dt-node dt-action2" style="min-width:130px;font-size:12px;">
+                second_block()
+              </div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px;text-align:center;">Stay put!</div>
+            </div>
+            <div style="width:20px;"></div>
+            <div class="dt-branch">
+              <div class="dt-line"></div>
+              <div class="dt-label" style="color:var(--red);">NO</div>
+              <div class="dt-node dt-action3" style="min-width:150px;font-size:12px;">
+                go_source_to_source()
+              </div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px;text-align:center;">Travel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:8px 20px;border:1px solid var(--pink);
+        background:rgba(244,63,143,0.06);font-size:12px;color:var(--pink);
+        font-family:'Share Tech Mono',monospace;text-align:center;">
+        current_location = next_color  ← always update after each pickup
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="label">State transitions</div>
+      <div class="code-block" style="font-size:12px;">
+<span class="cmt"># Starts here every run:</span>
+current_location = <span class="str">"mosaic"</span>
+
+<span class="cmt"># After picking from source A:</span>
+current_location = <span class="str">"A"</span>
+
+<span class="cmt"># After picking from source C:</span>
+current_location = <span class="str">"C"</span>
+
+<span class="cmt"># If next is also C → second_block()</span>
+<span class="cmt"># Robot never leaves source C</span>
+      </div>
+      <div class="card" style="border-color:var(--warn);">
+        <div class="label" style="color:var(--warn);">⚠ Must always update</div>
+        <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+          <li>If wrong, robot navigates to the wrong source</li>
+          <li>Causes wrong tiles to be picked up</li>
+          <li>Entire placement order gets corrupted</li>
+          <li><span class="hl-y">Update it every single loop iteration</span>, no exceptions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 8 — BLACK LINE NAVIGATION
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="slide-sub">Navigation Core</div>
+  <h2 class="slide-title">Black Line <span style="color:var(--cyan);">Detection</span></h2>
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <div class="label">go_until_black() — the fundamental nav primitive</div>
+      <div class="code-block" style="margin-bottom:14px;">
+<span class="kw">def</span> <span class="fn">go_until_black</span>():
+  robot.drive(SLOW_SPEED, <span class="num">0</span>)
+  <span class="kw">while not</span> <span class="fn">is_black</span>():
+    wait(<span class="num">10</span>)
+  <span class="fn">stop_robot</span>()
+
+<span class="kw">def</span> <span class="fn">is_black</span>():
+  <span class="kw">return</span> color_sensor_A.reflection() &lt; <span class="num">35</span>
+      </div>
+      <div class="label">go_until_nth_black(n) — count intersections</div>
+      <div class="code-block">
+<span class="kw">def</span> <span class="fn">go_until_nth_black</span>(target_count):
+  count = <span class="num">0</span>
+  <span class="kw">while</span> count &lt; target_count:
+    <span class="fn">go_until_black</span>()
+    count += <span class="num">1</span>
+    <span class="kw">if</span> count &lt; target_count:
+      <span class="fn">drive_mm</span>(<span class="num">60</span>)  <span class="cmt"># nudge past line</span>
+                    <span class="cmt"># avoid re-detecting!</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card" style="border-color:var(--cyan);">
+        <div class="label" style="color:var(--cyan);">How the source lane works</div>
+        <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+          <li>Source lane = a <span class="hl">vertical black line</span> on the mat</li>
+          <li>Each source has a <span class="hl">horizontal branch</span> intersecting it</li>
+          <li>Robot counts intersections to know how far to travel</li>
+          <li><span class="hl-g">1 intersection</span> = Source B or C (nearest to mosaic)</li>
+          <li><span class="hl-y">2 intersections</span> = Source A or D (furthest from mosaic)</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:var(--warn);">
+        <div class="label" style="color:var(--warn);">⚠ The 60mm nudge trick</div>
+        <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+          <li>After hitting a black line, sensor is still ON that line</li>
+          <li>Next <code>go_until_black()</code> would re-detect the same line instantly</li>
+          <li>Nudge <span class="hl-y">60mm forward</span> to physically clear the line</li>
+          <li>Only nudge between counts, not after the final one</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:var(--green);">
+        <div class="label" style="color:var(--green);">return_to_main_line()</div>
+        <div class="code-block" style="font-size:11px;margin-top:6px;">
+<span class="fn">turn_pivot</span>(<span class="num">180</span>)  <span class="cmt"># face source lane</span>
+<span class="fn">go_until_black</span>()  <span class="cmt"># drive back to it</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 9 — SOURCE-TO-SOURCE MOVEMENT
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div class="slide-sub">Step 3 — Navigation</div>
+  <h2 class="slide-title">Source <span style="color:var(--cyan);">→</span> Source Movement</h2>
+  <div class="two-col" style="align-items:start;gap:24px;">
+    <div>
+      <div class="label">decide_turn_direction() + SOURCE_LEVEL</div>
+      <div class="code-block" style="margin-bottom:12px;font-size:12px;">
+SOURCE_LEVEL = {<span class="str">"A"</span>:<span class="num">0</span>, <span class="str">"B"</span>:<span class="num">1</span>, <span class="str">"C"</span>:<span class="num">2</span>, <span class="str">"D"</span>:<span class="num">3</span>}
+
+<span class="kw">def</span> <span class="fn">decide_turn_direction</span>(current, target):
+  cl = SOURCE_LEVEL[current]
+  tl = SOURCE_LEVEL[target]
+  <span class="kw">if</span>   tl &lt; cl: <span class="kw">return</span> <span class="str">"LEFT"</span>   <span class="cmt"># turn -90°</span>
+  <span class="kw">elif</span> tl > cl: <span class="kw">return</span> <span class="str">"RIGHT"</span>  <span class="cmt"># turn +90°</span>
+      </div>
+      <div class="label">go_source_to_source() full sequence</div>
+      <div class="code-block" style="font-size:11.5px;">
+<span class="fn">return_to_main_line</span>()   <span class="cmt"># turn 180, find lane</span>
+
+direction = <span class="fn">decide_turn_direction</span>(cur, nxt)
+n_lines   = <span class="fn">count_lines_to_target</span>(cur, nxt)
+
+<span class="kw">if</span> direction == <span class="str">"LEFT"</span>:
+  <span class="fn">turn_pivot</span>(<span class="num">-90</span>)  <span class="cmt"># face up the lane</span>
+<span class="kw">elif</span> direction == <span class="str">"RIGHT"</span>:
+  <span class="fn">turn_pivot</span>(<span class="num">90</span>)   <span class="cmt"># face down the lane</span>
+
+<span class="fn">go_until_nth_black</span>(n_lines) <span class="cmt"># count intersections</span>
+<span class="fn">turn_pivot</span>(<span class="num">0</span>)               <span class="cmt"># face into source</span>
+<span class="fn">first_block</span>()               <span class="cmt"># grab!</span>
+      </div>
+    </div>
+    <div>
+      <div class="label" style="margin-bottom:10px;">Source lane — visual layout</div>
+
+      <!-- Visual source lane diagram -->
+      <div style="display:flex;align-items:stretch;gap:0;max-width:380px;">
+
+        <!-- LEFT: 4 source bays stacked vertically -->
+        <div style="display:flex;flex-direction:column;gap:6px;flex:1;">
+
+          <!-- Source A (white) -->
+          <div style="border:2px solid #cbd5e1;background:rgba(203,213,225,0.08);padding:8px 10px;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:#cbd5e1;">A · WHITE</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);">←← 2 LEFT</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;">
+              <div style="aspect-ratio:1;background:rgba(203,213,225,0.25);border:1px solid #cbd5e1;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(203,213,225,0.25);border:1px solid #cbd5e1;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(203,213,225,0.25);border:1px solid #cbd5e1;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(203,213,225,0.25);border:1px solid #cbd5e1;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(203,213,225,0.25);border:1px solid #cbd5e1;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(203,213,225,0.25);border:1px solid #cbd5e1;border-radius:1px;"></div>
+            </div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);margin-top:4px;">6 tiles available</div>
+          </div>
+
+          <!-- Source B (green) -->
+          <div style="border:2px solid #22c55e;background:rgba(34,197,94,0.08);padding:8px 10px;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:#22c55e;">B · GREEN</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);">← 1 LEFT</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;">
+              <div style="aspect-ratio:1;background:rgba(34,197,94,0.25);border:1px solid #22c55e;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(34,197,94,0.25);border:1px solid #22c55e;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(34,197,94,0.25);border:1px solid #22c55e;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(34,197,94,0.25);border:1px solid #22c55e;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(34,197,94,0.25);border:1px solid #22c55e;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(34,197,94,0.25);border:1px solid #22c55e;border-radius:1px;"></div>
+            </div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);margin-top:4px;">6 tiles available</div>
+          </div>
+
+          <!-- Source C (blue) -->
+          <div style="border:2px solid #3b82f6;background:rgba(59,130,246,0.08);padding:8px 10px;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:#3b82f6;">C · BLUE</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);">→ 1 RIGHT</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;">
+              <div style="aspect-ratio:1;background:rgba(59,130,246,0.25);border:1px solid #3b82f6;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(59,130,246,0.25);border:1px solid #3b82f6;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(59,130,246,0.25);border:1px solid #3b82f6;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(59,130,246,0.25);border:1px solid #3b82f6;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(59,130,246,0.25);border:1px solid #3b82f6;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(59,130,246,0.25);border:1px solid #3b82f6;border-radius:1px;"></div>
+            </div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);margin-top:4px;">6 tiles available</div>
+          </div>
+
+          <!-- Source D (yellow) -->
+          <div style="border:2px solid #eab308;background:rgba(234,179,8,0.08);padding:8px 10px;position:relative;">
+            <div style="position:absolute;top:-1px;right:-1px;
+              background:#eab308;color:#000;
+              font-family:'Share Tech Mono',monospace;font-size:8px;
+              padding:1px 5px;letter-spacing:.1em;">NEAREST START</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:#eab308;">D · YELLOW</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);">→→ 2 RIGHT</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;">
+              <div style="aspect-ratio:1;background:rgba(234,179,8,0.25);border:1px solid #eab308;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(234,179,8,0.25);border:1px solid #eab308;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(234,179,8,0.25);border:1px solid #eab308;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(234,179,8,0.25);border:1px solid #eab308;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(234,179,8,0.25);border:1px solid #eab308;border-radius:1px;"></div><div style="aspect-ratio:1;background:rgba(234,179,8,0.25);border:1px solid #eab308;border-radius:1px;"></div>
+            </div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);margin-top:4px;">6 tiles available</div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: vertical lane + mosaic connection indicator -->
+        <div style="display:flex;flex-direction:column;align-items:center;
+          width:48px;flex-shrink:0;position:relative;">
+          <!-- Vertical lane line -->
+          <div style="position:absolute;left:50%;top:0;bottom:0;
+            width:3px;background:var(--muted);transform:translateX(-50%);opacity:0.4;"></div>
+          <!-- 4 intersection dots -->
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;z-index:1;">
+            <div style="width:10px;height:10px;border-radius:50%;
+              background:var(--bg);border:2px solid #cbd5e1;"></div>
+          </div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;z-index:1;">
+            <div style="width:10px;height:10px;border-radius:50%;
+              background:var(--bg);border:2px solid #22c55e;"></div>
+          </div>
+          <!-- Mosaic connection point -->
+          <div style="flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+            z-index:1;padding:6px 0;">
+            <div style="width:14px;height:14px;border-radius:50%;
+              background:var(--warn);border:2px solid var(--warn);
+              box-shadow:0 0 8px rgba(255,204,0,0.6);"></div>
+          </div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;z-index:1;">
+            <div style="width:10px;height:10px;border-radius:50%;
+              background:var(--bg);border:2px solid #3b82f6;"></div>
+          </div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;z-index:1;">
+            <div style="width:10px;height:10px;border-radius:50%;
+              background:var(--bg);border:2px solid #eab308;"></div>
+          </div>
+          <!-- Arrow pointing right to mosaic -->
+          <div style="position:absolute;left:100%;top:50%;transform:translateY(-50%);
+            display:flex;align-items:center;gap:2px;white-space:nowrap;
+            font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--warn);">
+            →→ MOSAIC
+          </div>
+        </div>
+
+      </div><!-- end source diagram -->
+
+      <div class="card" style="margin-top:10px;border-color:var(--orange);max-width:380px;">
+        <div class="label" style="color:var(--orange);">⚠ Verify on real field</div>
+        <ul style="font-size:11px;color:#b0ccd8;line-height:1.7;padding-left:14px;margin-top:4px;">
+          <li>D (yellow) = physically nearest to start</li>
+          <li>A (white) = physically furthest from start</li>
+          <li>Run A→D test: confirm robot goes the correct direction</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 10 — FIFO SLIDE CARRIER
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s10">
+  <div class="slide-sub">Hardware</div>
+  <h2 class="slide-title">FIFO <span style="color:var(--cyan);">Slide Carrier</span></h2>
+  <div class="three-col" style="margin-bottom:20px;">
+    <div class="card" style="border-color:var(--cyan);">
+      <div class="label" style="color:var(--cyan);">store_to_slide()</div>
+      <div class="code-block" style="font-size:11px;margin-top:8px;">
+<span class="cmt"># Grab tile</span>
+<span class="fn">grab_motor</span>(<span class="num">80</span>°)
+<span class="fn">grab_motor</span>(<span class="num">150</span>°)
+
+<span class="cmt"># Release into slide</span>
+<span class="fn">grab_motor</span>(<span class="num">30</span>°)
+<span class="fn">grab_motor</span>(<span class="num">0</span>°)
+      </div>
+      <div style="font-size:12px;color:#b0ccd8;margin-top:8px;">
+        Tile drops into the top of the slide carrier.
+      </div>
+    </div>
+    <div class="card" style="border-color:var(--green);text-align:center;">
+      <div class="label" style="color:var(--green);">The Slide</div>
+      <div style="margin:16px 0;font-size:48px;">📦</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:11px;
+        color:var(--muted);margin-bottom:8px;">TOP (in)</div>
+      <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:8px;">
+        <div style="padding:4px;background:rgba(203,213,225,0.15);border:1px solid #cbd5e1;
+          font-size:11px;font-family:'Orbitron',sans-serif;color:#cbd5e1;">A</div>
+        <div style="padding:4px;background:rgba(59,130,246,0.2);border:1px solid #3b82f6;
+          font-size:11px;font-family:'Orbitron',sans-serif;color:#3b82f6;">C</div>
+        <div style="padding:4px;background:rgba(234,179,8,0.2);border:1px solid #eab308;
+          font-size:11px;font-family:'Orbitron',sans-serif;color:#eab308;">D</div>
+      </div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:11px;
+        color:var(--muted);">BOTTOM (out)</div>
+    </div>
+    <div class="card" style="border-color:var(--pink);">
+      <div class="label" style="color:var(--pink);">release_one_tile()</div>
+      <div class="code-block" style="font-size:11px;margin-top:8px;">
+<span class="cmt"># Open door briefly</span>
+<span class="fn">door_motor</span>(<span class="num">60</span>°)
+wait(<span class="num">250</span>ms)
+<span class="fn">door_motor</span>(<span class="num">0</span>°)
+wait(<span class="num">150</span>ms)
+      </div>
+      <div style="font-size:12px;color:#b0ccd8;margin-top:8px;">
+        One tile released per mosaic cell.
+      </div>
+    </div>
+  </div>
+  <div class="card" style="max-width:860px;border-color:var(--warn);background:rgba(255,204,0,0.04);">
+    <div class="label" style="color:var(--warn);">🔑 Critical rule</div>
+    <ul style="font-size:13px;color:#d8eaf4;line-height:1.8;padding-left:18px;margin-top:6px;">
+      <li>The slide <span class="hl-y">cannot reorder</span> tiles once stored</li>
+      <li>Wrong collection order = every tile lands in the wrong cell</li>
+      <li>Collection order must be <span class="hl-y">100% identical</span> to scan order</li>
+      <li>The FIFO principle is not a convenience — it IS the entire strategy</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 11 — RETURN + PLACE
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s11">
+  <div class="slide-sub">Steps 4 & 5</div>
+  <h2 class="slide-title">Return <span style="color:var(--cyan);">&</span> Place</h2>
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <div class="label">return_source_to_mosaic() — mirrors go_mosaic_to_source</div>
+      <div class="code-block" style="font-size:12px;margin-bottom:12px;">
+<span class="fn">return_to_main_line</span>()   <span class="cmt"># turn 180, find lane</span>
+
+<span class="kw">if</span> current_location == <span class="str">"A"</span>:
+  <span class="fn">turn_pivot</span>(<span class="num">-90</span>); <span class="fn">go_until_black</span>()
+  <span class="fn">drive_mm</span>(<span class="num">60</span>);    <span class="fn">go_until_black</span>() <span class="cmt"># 2 lines</span>
+
+<span class="kw">elif</span> current_location == <span class="str">"B"</span>:
+  <span class="fn">turn_pivot</span>(<span class="num">-90</span>); <span class="fn">go_until_black</span>()  <span class="cmt"># 1 line</span>
+
+<span class="kw">elif</span> current_location == <span class="str">"C"</span>:
+  <span class="fn">turn_pivot</span>(<span class="num">90</span>);  <span class="fn">go_until_black</span>()  <span class="cmt"># 1 line</span>
+
+<span class="kw">elif</span> current_location == <span class="str">"D"</span>:
+  <span class="fn">turn_pivot</span>(<span class="num">90</span>);  <span class="fn">go_until_black</span>()
+  <span class="fn">drive_mm</span>(<span class="num">60</span>);   <span class="fn">go_until_black</span>()  <span class="cmt"># 2 lines</span>
+
+<span class="fn">turn_pivot</span>(<span class="num">0</span>)     <span class="cmt"># face mosaic</span>
+<span class="fn">go_until_black</span>()   <span class="cmt"># align to cell [0]</span>
+      </div>
+    </div>
+    <div>
+      <div class="label">place_tiles_serpentine() — mirrors scan movement</div>
+      <div class="code-block" style="font-size:12px;margin-bottom:12px;">
+<span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">12</span>):
+  <span class="fn">release_one_tile</span>()
+  <span class="kw">if</span> i &lt; <span class="num">11</span>:
+    <span class="fn">move_to_next_mosaic_slot</span>(i)
+
+<span class="cmt"># Row 1 [0→3]:  drive forward per cell</span>
+<span class="cmt"># End row 1 [3]: turn 90, drive ROW_H, turn 180</span>
+<span class="cmt"># Row 2 [4→7]:  drive forward (heading 180)</span>
+<span class="cmt"># End row 2 [7]: turn 90, drive ROW_H, turn 0</span>
+<span class="cmt"># Row 3 [8→11]: drive forward per cell</span>
+      </div>
+      <div class="card" style="border-color:var(--pink);">
+        <div class="label" style="color:var(--pink);">Why no color decisions here?</div>
+        <ul style="font-size:13px;color:#b0ccd8;line-height:1.8;padding-left:18px;margin-top:6px;">
+          <li>FIFO slide already holds tiles in the correct order</li>
+          <li>Robot just <span class="hl-p">releases one tile</span> at each cell position</li>
+          <li>No color sensor reading during placement</li>
+          <li>No branching logic — pure mechanical execution</li>
+          <li>Placement movement mirrors scan movement exactly</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 12 — FULL RUN SUMMARY
+     ═══════════════════════════════════════════ -->
+<div class="slide" id="s12">
+  <div class="slide-sub">Summary</div>
+  <h2 class="slide-title">Full <span style="color:var(--cyan);">Run</span> Overview</h2>
+  <div style="display:flex;flex-direction:column;gap:8px;width:100%;max-width:900px;
+    margin-bottom:16px;">
+    <div style="display:grid;grid-template-columns:32px 1fr auto;gap:0 14px;
+      align-items:center;padding:10px 16px;border:1px solid;
+      border-color:var(--cyan);background:rgba(0,212,255,0.04);">
+      <span style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--cyan);">1</span>
+      <div><span style="font-weight:700;color:#fff;">Start → Mosaic Frame</span>
+        <span style="font-size:12px;color:var(--muted);display:block;">50° exit, navigate black lines, gyro re-zero, arrive cell [0]</span></div>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);">—</span>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr auto;gap:0 14px;
+      align-items:center;padding:10px 16px;border:1px solid;
+      border-color:var(--warn);background:rgba(255,204,0,0.04);">
+      <span style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--warn);">2</span>
+      <div><span style="font-weight:700;color:#fff;">Scan Mosaic</span>
+        <span style="font-size:12px;color:var(--muted);display:block;">Serpentine: row L→R, row R→L, row L→R → mosaic_list[12] built → return to cell [0]</span></div>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);">—</span>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr auto;gap:0 14px;
+      align-items:center;padding:10px 16px;border:1px solid;
+      border-color:var(--green);background:rgba(0,255,157,0.04);">
+      <span style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--green);">3</span>
+      <div><span style="font-weight:700;color:#fff;">Collect All 12 Tiles</span>
+        <span style="font-size:12px;color:var(--muted);display:block;">Loop 12×: read list → navigate source → grab → FIFO slide stores. current_location tracks position.</span></div>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);">—</span>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr auto;gap:0 14px;
+      align-items:center;padding:10px 16px;border:1px solid;
+      border-color:var(--orange);background:rgba(249,115,22,0.04);">
+      <span style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--orange);">4</span>
+      <div><span style="font-weight:700;color:#fff;">Return to Mosaic</span>
+        <span style="font-size:12px;color:var(--muted);display:block;">Mirror of mosaic→source. Final source → main line → count lines → face mosaic → cell [0]</span></div>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);">—</span>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr auto;gap:0 14px;
+      align-items:center;padding:10px 16px;border:1px solid;
+      border-color:var(--pink);background:rgba(244,63,143,0.04);">
+      <span style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--pink);">5</span>
+      <div><span style="font-weight:700;color:#fff;">Place All 12 Tiles</span>
+        <span style="font-size:12px;color:var(--muted);display:block;">Serpentine placement — release 1 tile per cell. No color decisions. FIFO handles everything.</span></div>
+      <span style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--pink);">120 pts</span>
+    </div>
+  </div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+    <div class="card" style="text-align:center;min-width:120px;border-color:var(--pink);">
+      <div class="label">Mosaic</div>
+      <div class="value" style="color:var(--pink);">120</div>
+    </div>
+    <div class="card" style="text-align:center;min-width:120px;border-color:var(--green);">
+      <div class="label">Tools</div>
+      <div class="value" style="color:var(--green);">45</div>
+    </div>
+    <div class="card" style="text-align:center;min-width:120px;border-color:var(--warn);">
+      <div class="label">Cement</div>
+      <div class="value" style="color:var(--warn);">40</div>
+    </div>
+    <div class="card" style="text-align:center;min-width:120px;border-color:var(--purple);">
+      <div class="label">Barriers</div>
+      <div class="value" style="color:var(--purple);">28</div>
+    </div>
+    <div class="card" style="text-align:center;min-width:140px;border-color:var(--cyan);background:rgba(0,212,255,0.06);">
+      <div class="label" style="color:var(--cyan);">TOTAL MAX</div>
+      <div class="value" style="color:var(--cyan);font-size:28px;">233</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← PREV</button>
+  <div class="dots" id="dots"></div>
+  <span class="slide-counter"><span id="cur">1</span> / <span id="tot"></span></span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">NEXT →</button>
+</div>
+
+<script>
+// ── SLIDE ENGINE ──
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let current = 0, animating = false;
+
+document.getElementById('tot').textContent = total;
+
+const dotsEl = document.getElementById('dots');
+for(let i=0;i<total;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' active':'');
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function updateUI(){
+  document.getElementById('cur').textContent=current+1;
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').disabled=current===total-1;
+  document.getElementById('prog').style.width=((current+1)/total*100)+'%';
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+}
+
+function goTo(idx){
+  if(animating||idx===current||idx<0||idx>=total)return;
+  animating=true;
+  // stop scan if leaving slide 4
+  if(current===3){ resetScanAnim(); }
+  slides[current].classList.add('out');
+  slides[current].classList.remove('active');
+  setTimeout(()=>{
+    slides[current].classList.remove('out');
+    current=idx;
+    slides[current].classList.add('active');
+    updateUI();
+    // auto-start scan animation when entering slide 4 (index 3)
+    if(idx===3){ setTimeout(startScanAnim, 400); }
+    setTimeout(()=>{animating=false;},450);
+  },220);
+}
+function navigate(d){goTo(current+d);}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();navigate(1);}
+  if(e.key==='ArrowLeft'){e.preventDefault();navigate(-1);}
+});
+updateUI();
+
+// ── SCAN ANIMATION (slide 4) ──
+// Updated to match the glow behavior from the second pasted HTML:
+// - one active glowing tile at a time
+// - previous tile stays filled but stops glowing
+// - scan follows true serpentine slot order: 0,1,2,3,7,6,5,4,8,9,10,11
+// - auto-replays after the scan completes
+const DEMO_COLORS = ['A','B','C','D','B','A','D','C','C','D','B','A'];
+const COLOR_NAMES = {A:'A', B:'B', C:'C', D:'D'}; // A=White, B=Green, C=Blue, D=Yellow
+const SERPENTINE = [0,1,2,3, 7,6,5,4, 8,9,10,11];
+let scanTimer = null;
+let scanRunning = false;
+let scanReplayTimer = null;
+
+function buildGrid(){
+  const g = document.getElementById('scanGrid');
+  if(!g || g.children.length > 0) return;
+  for(let i=0; i<12; i++){
+    const c = document.createElement('div');
+    c.className = 'scan-cell';
+    c.id = 'sc' + i;
+    c.innerHTML = `<span class="idx">[${i}]</span>`;
+    g.appendChild(c);
+  }
+}
+buildGrid();
+
+function startScanAnim(){
+  if(scanRunning) return;
+  resetScanAnim();
+  scanRunning = true;
+
+  const status = document.getElementById('scanStatus');
+  let scanIdx = 0;
+  const displayed = [];
+
+  function scanNext(){
+    if(scanIdx >= 12){
+      scanRunning = false;
+      if(status) status.textContent = '✅ SCAN COMPLETE — mosaic_list built';
+      scanReplayTimer = setTimeout(startScanAnim, 1800);
+      return;
+    }
+
+    // Previous tile: keep color, remove glow.
+    if(scanIdx > 0){
+      const prevIndex = SERPENTINE[scanIdx - 1];
+      const prevColor = DEMO_COLORS[scanIdx - 1];
+      const prev = document.getElementById('sc' + prevIndex);
+      if(prev){
+        prev.className = `scan-cell done-${prevColor}`;
+        prev.innerHTML = `<span class="idx">[${prevIndex}]</span>${COLOR_NAMES[prevColor]}`;
+      }
+    }
+
+    // Current tile: fill + glow.
+    const cellIndex = SERPENTINE[scanIdx];
+    const color = DEMO_COLORS[scanIdx];
+    const cell = document.getElementById('sc' + cellIndex);
+
+    if(cell){
+      cell.className = `scan-cell done-${color} scanning`;
+      cell.innerHTML = `<span class="idx">[${cellIndex}]</span>${COLOR_NAMES[color]}`;
+    }
+
+    displayed.push(color);
+    if(status){
+      const rowText = scanIdx < 4
+        ? 'ROW 1  LEFT → RIGHT'
+        : scanIdx < 8
+          ? 'ROW 2  RIGHT → LEFT'
+          : 'ROW 3  LEFT → RIGHT';
+      status.textContent = `${rowText}  ·  cell [${cellIndex}]  →  "${color}"  (${scanIdx + 1}/12)`;
+    }
+
+    scanIdx++;
+    scanTimer = setTimeout(scanNext, 520);
+  }
+
+  scanTimer = setTimeout(scanNext, 250);
+}
+
+function resetScanAnim(){
+  clearTimeout(scanTimer);
+  clearTimeout(scanReplayTimer);
+  scanRunning = false;
+
+  for(let i=0; i<12; i++){
+    const c = document.getElementById('sc' + i);
+    if(c){
+      c.className = 'scan-cell';
+      c.innerHTML = `<span class="idx">[${i}]</span>`;
+    }
+  }
+
+  const status = document.getElementById('scanStatus');
+  if(status) status.textContent = '';
+}
+
+// ── ARRAY ANIMATION (slide 5) ──
+const DEMO_LIST=['A','B','C','D','B','A','D','C','C','D','B','A'];
+let arrTimer=null;
+
+function buildArr(){
+  const a=document.getElementById('demoArr');
+  if(!a||a.children.length>0)return;
+  for(let i=0;i<12;i++){
+    const d=document.createElement('div');
+    d.className='arr-item empty';
+    d.id='ai'+i;
+    d.innerHTML=`<span class="ai">[${i}]</span><span class="av">_</span>`;
+    a.appendChild(d);
+  }
+}
+buildArr();
+
+function fillArr(){
+  resetArr();
+  let i=0;
+  arrTimer=setInterval(()=>{
+    if(i>=12){clearInterval(arrTimer);return;}
+    const item=document.getElementById('ai'+i);
+    if(item){
+      const c=DEMO_LIST[i];
+      item.className='arr-item color-'+c;
+      item.innerHTML=`<span class="ai">[${i}]</span><span class="av">"${c}"</span>`;
+    }
+    i++;
+  },300);
+}
+function resetArr(){
+  clearInterval(arrTimer);
+  for(let i=0;i<12;i++){
+    const item=document.getElementById('ai'+i);
+    if(item){
+      item.className='arr-item empty';
+      item.innerHTML=`<span class="ai">[${i}]</span><span class="av">_</span>`;
+    }
+  }
+}
+</script>
+</body>
+</html>
